@@ -11,6 +11,7 @@ const Form = ({ title, onFormSubmit, date }) => {
         cardio: false,
         core: false,
     });
+    const [selectedValue, setSelectedValue] = useState('upper');
 
     const weightsArray = [];
 
@@ -106,10 +107,9 @@ const Form = ({ title, onFormSubmit, date }) => {
             exerciseName: exerciseName,
             sets: sets,
             weight: weight,
-            checked: checkedItems
+            checked: checkedItems,
         });
     };
-
 
     const onExerciseNameChange = (e) => {
         e.preventDefault();
@@ -120,56 +120,66 @@ const Form = ({ title, onFormSubmit, date }) => {
         setCheckedItems({ ...checkedItems, [e.target.name]: e.target.checked });
     };
 
-    useEffect(() => {
-        //console.log('checked items: ', checkedItems);
-    }, [checkedItems]);
+    const onSelectChange = (e) => {
+        setSelectedValue(e.target.value);
+    };
 
     return (
         <Fragment>
             <h1>{title}</h1>
             <h2>{date.toString()}</h2>
 
-            <form>
-                Exercise Type:
-                {checkboxes.map((checkbox) => (
-                    <label key={checkbox.key}>
-                        {checkbox.label}
+            <form onSubmit={onSubmit}>
+                <div className="exercise_form">
+                    Exercise Type:
+                    {checkboxes.map((checkbox) => (
+                        <label key={checkbox.key}>
+                            {checkbox.label}
+                            <input
+                                type="checkbox"
+                                name={checkbox.name}
+                                checked={checkedItems[checkbox.name]}
+                                onChange={onCheckboxChange}
+                            />
+                        </label>
+                    ))}
+                    <select value={selectedValue} onChange={onSelectChange}>
+                        <option value="upper">Upper-body</option>
+                        <option value="lower">Lower-body</option>
+                        <option value="full">Full-body</option>
+                        <option value="core">Core</option>
+                        <option value="cardio">Cardio</option>
+                    </select>
+                    <label>
+                        Exercise Name:
                         <input
-                            type="checkbox"
-                            name={checkbox.name}
-                            checked={checkedItems[checkbox.name]}
-                            onChange={onCheckboxChange}
+                            name="exercise_name"
+                            type="text"
+                            autoComplete="off"
+                            onChange={onExerciseNameChange}
                         />
                     </label>
-                ))}
-            </form>
+                    <label>
+                        Sets:
+                        <input
+                            name="sets"
+                            type="number"
+                            min="0"
+                            value={sets}
+                            onChange={handleSetsChange}
+                        />
+                    </label>
+                    {renderWeightLabel()}
+                    {renderWeightInputs()}
+                </div>
 
-            <form onSubmit={onSubmit}>
-                <label>
-                    Exercise Name:
-                    <input
-                        name="exercise_name"
-                        type="text"
-                        autoComplete="off"
-                        onChange={onExerciseNameChange}
-                    />
-                </label>
-                <label>
-                    Sets:
-                    <input
-                        name="sets"
-                        type="number"
-                        min="0"
-                        value={sets}
-                        onChange={handleSetsChange}
-                    />
-                </label>
-                {renderWeightLabel()}
-                {renderWeightInputs()}
-                <button onClick={onSubmitBtnClick}>Submit</button>
+                <button onClick={onSubmitBtnClick}>Add</button>
+                <button type="button">Done</button>
             </form>
         </Fragment>
     );
 };
 
 export default Form;
+
+// Create componenent to list all current exercises for that user/date

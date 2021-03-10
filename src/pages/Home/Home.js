@@ -5,7 +5,7 @@ import Form from '../../components/form/Form';
 import ViewWorkout from '../../components/ViewWorkout/ViewWorkout';
 
 const formattedDate = format(new Date(), 'dd MMM yyyy');
-
+ 
 const Home = () => {
     const [date, setDate] = useState(formattedDate);
     const [formData, setFormData] = useState({});
@@ -14,15 +14,17 @@ const Home = () => {
     useEffect(() => {
         // Request to API for specific workout
         const getCurrentWorkout = async () => {
-        const response = await fetch(`http://localhost:3001/workout/1/${date}`);
-        const jsonData = await response.json();
+            const response = await fetch(
+                `http://localhost:3001/workout/1/${date}`
+            );
+            const jsonData = await response.json();
 
-        setRequestedWorkoutData(() => jsonData)
+            setRequestedWorkoutData(() => jsonData);
         };
-
         getCurrentWorkout();
-        
-    }, [date]);
+
+    }, [date, setRequestedWorkoutData]);
+
 
     const onDateChange = (date) => {
         setDate(date);
@@ -34,11 +36,12 @@ const Home = () => {
         setFormData(formData);
     };
 
+    
     const renderAddWorkout = () => {
         if (requestedWorkoutData.length === 0) {
             return <Form title={'Add Workout'} onFormSubmit={onFormSubmit} date={date} />
         } else {
-            return <ViewWorkout workoutData={requestedWorkoutData} />
+            return <ViewWorkout date={date} />
         }
     };
 

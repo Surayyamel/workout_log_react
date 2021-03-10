@@ -1,15 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const ViewWorkout = ({ workoutData }) => {
+const ViewWorkout = ({ date, isWorkout }) => {
+    // Make request here instead of receiving as a prop
 
-    useEffect(() => {
-        console.log(workoutData)
-    }, [workoutData]);
+   
 
 
-    return (
-        <div>Workout</div>
-    );
+
+    return <div>Workout</div>;
 };
 
 export default ViewWorkout;
