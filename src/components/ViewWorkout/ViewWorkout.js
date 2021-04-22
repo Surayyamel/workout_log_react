@@ -1,13 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-const ViewWorkout = ({ date, isWorkout }) => {
-    // Make request here instead of receiving as a prop
+const ViewWorkout = ({ requestedWorkoutData }) => {
 
-   
+    const workoutNames = requestedWorkoutData.map((workoutData, index) => {
+        return (
+            <div key={index}>
+                <div>{workoutData.name}</div>
+            </div>
+        );
+    });
 
-
-
-    return <div>Workout</div>;
+    return (
+        <div>
+            {workoutNames}
+            <button>Edit</button>
+        </div>
+    );
 };
 
 export default ViewWorkout;

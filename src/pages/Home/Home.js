@@ -1,7 +1,7 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import { format } from 'date-fns';
 import Calendar from '../../components/calendar/Calendar';
-import Form from '../../components/form/Form';
+import AddWorkout from '../../components/AddWorkout/AddWorkout';
 import ViewWorkout from '../../components/ViewWorkout/ViewWorkout';
 
 const formattedDate = format(new Date(), 'dd MMM yyyy');
@@ -26,27 +26,30 @@ const Home = () => {
     }, [date, setRequestedWorkoutData]);
 
 
+    // Callback for Calendar component
     const onDateChange = (date) => {
         setDate(date);
     };
 
+    // Callback for Form component
     const onFormSubmit = (formData) => {
-        console.log('Submitted!');
         // sets and weights inside formData
         setFormData(formData);
+        console.log('Submitted!', formData);
     };
 
     
     const renderAddWorkout = () => {
         if (requestedWorkoutData.length === 0) {
-            return <Form title={'Add Workout'} onFormSubmit={onFormSubmit} date={date} />
+            return <AddWorkout onFormSubmit={onFormSubmit} date={date}  />
         } else {
-            return <ViewWorkout date={date} />
+            return <ViewWorkout date={date} requestedWorkoutData={requestedWorkoutData} />
         }
     };
 
     return (
         <Fragment>
+            <h1>Workout Log</h1>
             <Calendar onDateChange={onDateChange} />
             {renderAddWorkout()}
         </Fragment>
@@ -62,3 +65,7 @@ export default Home;
 // View Workout
 // Form: - Edit from view workout
 //       - Add new from clicked empty day
+
+
+// Edit workout
+// Pass the requested values as props into the state to pre-populate the fields
