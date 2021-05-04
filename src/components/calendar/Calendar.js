@@ -17,9 +17,15 @@ const ReactCalendar = ({ onDateChange }) => {
         setDate(date);
     };
 
+    const tileContent = (
+        <div>
+           
+        </div>
+    );
+
     return (
         <div>
-            <Calendar onChange={onChange} value={date} />
+            <Calendar onChange={onChange} value={date} tileContent={tileContent} />
         </div>
     );
 };

@@ -3,11 +3,9 @@ import Form from '../form/Form';
 
 const AddWorkout = ({ onFormSubmit, date }) => {
 
-    // Import view workout component?
-
     return (
         <Fragment>
-            <Form onFormSubmit={onFormSubmit} date={date} />
+            <Form onFormSubmit={onFormSubmit} date={date} title="Add Workout" defaultValues={[{name: 'name'}]} />
         </Fragment>
        
     );

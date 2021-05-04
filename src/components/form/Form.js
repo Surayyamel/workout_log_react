@@ -1,176 +1,113 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 
-const Form = ({ onFormSubmit, date }) => {
-    const [inputFields, setInputFields] = useState([
-        { exerciseName: '', sets: 0, reps: [], weight: [] },
-    ]);
-
-    // Change event for exercise name and sets
-    const handleInputChange = (index, event) => {
-        const values = [...inputFields];
-        values[index][event.target.name] = event.target.value;
-        setInputFields(values);
-    };
-
-    // Removes field when user clicks "+"
-    const handleAddFields = () => {
-        setInputFields([
-            ...inputFields,
-            { exerciseName: '', sets: 0, reps: [], weight: [] },
-        ]);
-    };
-
-    // Removes field when user clicks "-"
-    const handleRemoveFields = (index) => {
-        const values = [...inputFields];
-        values.splice(index, 1);
-        setInputFields(values);
-    };
+function App({ onFormSubmit, date, title, defaultValues }) {
 
     
-    const handleRepsAndWeightChange = (e, index) => {
-        const name = e.target.name;
-        const value = Number(e.target.value);
-        const id = Number(e.target.id);
 
-        const values = [...inputFields];
+    // Loop over defaultValues, create an object with the insides and use that object inside the defaultValues obj of useForm
 
-        values[index][name] = [
-            ...values[index][name],
-            { id: id, [name]: value },
-        ];
 
-        setInputFields(values);
+    const {
+        register,
+        handleSubmit,
+        watch,
+        reset,
+        formState: { errors },
+    } = useForm({
+        mode: 'onBlur',
+        defaultValues: {
+            exerciseName: defaultValues.exerciseName,
+            numberOfSets: defaultValues.numberOfSets || null,
+            
+        },
+    });
 
+    const onSubmit = (data) => {
+        onFormSubmit(data);
     };
 
-    const renderRepsAndWeightInputs = (sets, index) => {
-        const setsArray = [];
-        for (let i = 1; i <= sets; i++) {
-            setsArray.push(
-                <div key={i}>
-                    Reps:
-                    <input
-                        id={i}
-                        name="reps"
-                        type="number"
-                        min="0"
-                        onChange={(e) => handleRepsAndWeightChange(e, index)}
-                    />
-                    Weight:
-                    <input
-                        id={i}
-                        name="weight"
-                        type="number"
-                        min="0"
-                        onChange={(e) => handleRepsAndWeightChange(e, index)}
-                    />
-                </div>
-            );
-        }
+    // Watch to enable rerender when sets number is changed
+    const watchNumberOfSets = watch('numberOfSets');
 
-        return setsArray;
+    // Return array of sets indexes. Using the spread assings the indexes (if use new Array, you get [empty x n])
+    const setsNumbers = () => {
+        return [...Array(parseInt(watchNumberOfSets || 0)).keys()];
     };
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-
-        const finalValues = [];
-
-        inputFields.map((inputField) => {
-            // Array for weights
-            const uniqueArray = [];
-            // Array for reps
-            const uniqueArray2 = [];
-            
-            const reversedWeight = inputField.weight.reverse();
-            const reversedReps = inputField.reps.reverse();
-            
-            reversedWeight.map((weights) => {
-                let i = uniqueArray.findIndex((x) => x.id === weights.id);
-                if (i <= -1) {
-                    uniqueArray.push({
-                        id: weights.id,
-                        weight: weights.weight,
-                    });
-                }
-            });
-
-            reversedReps.map((rep) => {
-                let i = uniqueArray2.findIndex((x) => x.id === rep.id);
-                if (i <= -1) {
-                    uniqueArray2.push({
-                        id: rep.id,
-                        reps: rep.reps,
-                    });
-                }
-            });
-
-            const values = inputField;
-            values.weight = uniqueArray;
-            values.reps = uniqueArray2;
-
-            finalValues.push(values)
-
-            return;
-        });
-
-        setInputFields(finalValues);
-     
-        onFormSubmit(finalValues);
-
+    const onReset = () => {
+        reset();
     };
 
     return (
-        <div className="App">
-            <h1>Add Workout</h1>
-            <h2>{date.toString()}</h2>
-            <form onSubmit={onSubmit}>
-                {inputFields.map((inputField, index) => (
-                    <div key={index}>
-                        <label>
-                            Exercise Name:
-                            <input
-                                type="text"
-                                name="exerciseName"
-                                value={inputField.exerciseName}
-                                onChange={(event) =>
-                                    handleInputChange(index, event)
-                                }
-                            />
-                        </label>
-                        <label>
-                            Sets:
-                            <input
-                                type="number"
-                                name="sets"
-                                min="0"
-                                value={inputField.sets}
-                                onChange={(event) =>
-                                    handleInputChange(index, event)
-                                }
-                            />
-                        </label>
-                        <label>
-                            {renderRepsAndWeightInputs(inputField.sets, index)}
-                        </label>
-                        <button
-                            type="button"
-                            onClick={() => handleRemoveFields(index)}
-                        >
-                            -
-                        </button>
-                    </div>
-                ))}
-                <button type="button" onClick={() => handleAddFields()}>
-                    +
-                </button>
-                <button>Send</button>
-            </form>
-        </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <h3>{title}</h3>
+            <label>Exercise Name:</label>
+            <input
+                id="exerciseName"
+                {...register('exerciseName', {
+                    required: 'Please enter exercise name',
+                })}
+            />
+            <br />
+            {errors.exerciseName && errors.exerciseName.message}
+            <br />
+            <label>Number of Sets:</label>
+            <select {...register('numberOfSets', {required: 'Please enter a valid number'})}>
+                {['', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => {
+                    return (
+                        <option key={i} value={i}>
+                            {i}
+                        </option>
+                    );
+                })}
+            </select>
+
+            {setsNumbers().map((i) => (
+                <div key={i}>
+                    <h5>Set {i + 1}</h5>
+                    <label>Reps:</label>
+                    <input {...register(`reps${i}`, {required: 'Please enter a valid number'})} type="number" min="0" />
+
+                    <label>Weight:</label>
+                    <input
+                        {...register(`weight${i}`, {required: 'Please enter a valid number'})}
+                        type="number"
+                        min="0"
+                    />
+                </div>
+            ))}
+
+            <button type="submit">Add</button>
+            <button type="reset" onClick={onReset}>
+                Reset
+            </button>
+        </form>
     );
-};
+}
 
-export default Form;
+export default App;
 
-// Create componenent to list all current exercises for that user/date
+//  {errors.exerciseName.message ? <span>{errors.exerciseName.message}</span> : ''}
+//  {errors.exerciseName ? <p>{errors.exerciseName.message}</p> : ''}
+
+// set0reps: defaultValues.set0reps || null,
+//             set0weight: defaultValues.set0weight || null,
+//             set1reps: defaultValues.set1reps || null,
+//             set1weight: defaultValues.set1weight || null,
+//             set2reps: defaultValues.set2reps || null,
+//             set2weight: defaultValues.set2weight || null,
+//             set3reps: defaultValues.set3reps || null,
+//             set3weight: defaultValues.set3weight || null,
+//             set4reps: defaultValues.set4reps || null,
+//             set4weight: defaultValues.set4weight || null,
+//             set5reps: defaultValues.set5reps || null,
+//             set5weight: defaultValues.set5weight || null,
+//             set6reps: defaultValues.set6reps || null,
+//             set6weight: defaultValues.set6weight || null,
+//             set7reps: defaultValues.set7reps || null,
+//             set7weight: defaultValues.set7weight || null,
+//             set8reps: defaultValues.set8reps || null,
+//             set8weight: defaultValues.set8weight || null,
+//             set9reps: defaultValues.set9reps || null,
+//             set9weight: defaultValues.set9weight || null,
