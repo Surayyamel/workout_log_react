@@ -1,13 +1,25 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-function App({ onFormSubmit, date, title, defaultValues }) {
+function App({ onFormSubmit, date, title, prefillData }) {
 
-    
+    const defaultValues = {
+        exerciseName: '',
+        numberOfSets: 0,
+    };
 
-    // Loop over defaultValues, create an object with the insides and use that object inside the defaultValues obj of useForm
+    if (prefillData) {
+        defaultValues.exerciseName = prefillData.name;
+        defaultValues.numberOfSets = prefillData.sets;
+        prefillData.reps.map((rep, i) => {
+            defaultValues[`reps${i}`] = rep;
+        });
+        prefillData.weight.map((weight, i) => {
+            defaultValues[`weight${i}`] = weight;
+        });
+    }
 
-
+    // Initialise form
     const {
         register,
         handleSubmit,
@@ -16,11 +28,7 @@ function App({ onFormSubmit, date, title, defaultValues }) {
         formState: { errors },
     } = useForm({
         mode: 'onBlur',
-        defaultValues: {
-            exerciseName: defaultValues.exerciseName,
-            numberOfSets: defaultValues.numberOfSets || null,
-            
-        },
+        defaultValues: defaultValues,
     });
 
     const onSubmit = (data) => {
@@ -53,7 +61,11 @@ function App({ onFormSubmit, date, title, defaultValues }) {
             {errors.exerciseName && errors.exerciseName.message}
             <br />
             <label>Number of Sets:</label>
-            <select {...register('numberOfSets', {required: 'Please enter a valid number'})}>
+            <select
+                {...register('numberOfSets', {
+                    required: 'Please enter a valid number',
+                })}
+            >
                 {['', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => {
                     return (
                         <option key={i} value={i}>
@@ -67,11 +79,19 @@ function App({ onFormSubmit, date, title, defaultValues }) {
                 <div key={i}>
                     <h5>Set {i + 1}</h5>
                     <label>Reps:</label>
-                    <input {...register(`reps${i}`, {required: 'Please enter a valid number'})} type="number" min="0" />
+                    <input
+                        {...register(`reps${i}`, {
+                            required: 'Please enter a valid number',
+                        })}
+                        type="number"
+                        min="0"
+                    />
 
                     <label>Weight:</label>
                     <input
-                        {...register(`weight${i}`, {required: 'Please enter a valid number'})}
+                        {...register(`weight${i}`, {
+                            required: 'Please enter a valid number',
+                        })}
                         type="number"
                         min="0"
                     />
@@ -87,27 +107,3 @@ function App({ onFormSubmit, date, title, defaultValues }) {
 }
 
 export default App;
-
-//  {errors.exerciseName.message ? <span>{errors.exerciseName.message}</span> : ''}
-//  {errors.exerciseName ? <p>{errors.exerciseName.message}</p> : ''}
-
-// set0reps: defaultValues.set0reps || null,
-//             set0weight: defaultValues.set0weight || null,
-//             set1reps: defaultValues.set1reps || null,
-//             set1weight: defaultValues.set1weight || null,
-//             set2reps: defaultValues.set2reps || null,
-//             set2weight: defaultValues.set2weight || null,
-//             set3reps: defaultValues.set3reps || null,
-//             set3weight: defaultValues.set3weight || null,
-//             set4reps: defaultValues.set4reps || null,
-//             set4weight: defaultValues.set4weight || null,
-//             set5reps: defaultValues.set5reps || null,
-//             set5weight: defaultValues.set5weight || null,
-//             set6reps: defaultValues.set6reps || null,
-//             set6weight: defaultValues.set6weight || null,
-//             set7reps: defaultValues.set7reps || null,
-//             set7weight: defaultValues.set7weight || null,
-//             set8reps: defaultValues.set8reps || null,
-//             set8weight: defaultValues.set8weight || null,
-//             set9reps: defaultValues.set9reps || null,
-//             set9weight: defaultValues.set9weight || null,

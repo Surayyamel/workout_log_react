@@ -4,19 +4,18 @@
 import React, { useState } from 'react';
 import Form from '../form/Form';
 
-const EditWorkout = ({ date, requestedWorkoutData }) => {
-    const [workoutData, setWorkoutData] = useState(requestedWorkoutData);
-
-    // grab the requestedData as props and pre-fill the form
-    // On submit we want to send a put request
-
+const EditWorkout = ({ date, prefillData }) => {
+ 
     const onSubmit = (formData) => {
-        setWorkoutData(formData)
+        // This is to send the put request
+
+        console.log(formData)
+      
     }
 
     return (
         <div>
-            <Form onFormSubmit={onSubmit} date={date} title="Edit Workout" defaultValues={requestedWorkoutData} />
+            <Form onFormSubmit={onSubmit} date={date} title="Edit Workout" prefillData={prefillData} />
         </div>
     );
 }

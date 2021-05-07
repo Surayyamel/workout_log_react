@@ -1,10 +1,17 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import EditWorkout from '../EditWorkout/EditWorkout';
 import AddWorkout from '../AddWorkout/AddWorkout';
+import EditButton from '../EditButton/EditButton';
 
 const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit }) => {
     const [showEditForm, setShowEditForm] = useState(false);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [editFormData, setEditFormData] = useState({
+        name: '',
+        sets: 0,
+        reps: [],
+        weight: []
+    })
 
     const exerciseArray = [];
     (function pushExercisesToArray(workout) {
@@ -14,6 +21,19 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit }) => {
     })(requestedWorkoutData);
    
 
+    const onEditClick = (name, sets, reps, weight) => {
+        //console.log(name, sets, reps, weight)
+        setEditFormData({
+            name: name, 
+            sets: sets, 
+            reps: reps, 
+            weight: weight
+        })
+        
+        setShowEditForm(true);
+    };
+
+   
     const list = [];
     (function renderExerciseList() {
         exerciseArray.map((exercise, i) => {
@@ -34,10 +54,12 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit }) => {
                             </tr>
                         </tbody>
                     </table>
+                    <EditButton onEditClick={onEditClick} name={exercise.name} sets={exercise.sets} reps={exercise.reps} weight={exercise.weight}/>
                 </Fragment>
             );
         });
     })()
+
 
     useEffect(() => {
         reset();
@@ -49,10 +71,7 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit }) => {
         }
     };
 
-    const onEditClick = () => {
-        setShowEditForm(true);
-    };
-
+    
     const onAddClick = () => {
         setShowAddForm(true);
     };
@@ -66,7 +85,7 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit }) => {
             return (
                 <EditWorkout
                     date={date}
-                    requestedWorkoutData={requestedWorkoutData}
+                    prefillData={editFormData}
                 />
             );
         } else if (showAddForm) {
@@ -83,7 +102,7 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit }) => {
                 <div>{date}</div>
                 {list}
 
-                <button onClick={onEditClick}>Edit</button>
+                
                 <button onClick={onAddClick}>Add</button>
             </div>
         );

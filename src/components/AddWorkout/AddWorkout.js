@@ -5,7 +5,7 @@ const AddWorkout = ({ onFormSubmit, date }) => {
 
     return (
         <Fragment>
-            <Form onFormSubmit={onFormSubmit} date={date} title="Add Workout" defaultValues={[{name: 'name'}]} />
+            <Form onFormSubmit={onFormSubmit} date={date} title="Add Workout" />
         </Fragment>
        
     );
