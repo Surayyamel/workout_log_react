@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import EditWorkout from '../EditWorkout/EditWorkout';
 import AddWorkout from '../AddWorkout/AddWorkout';
 import EditButton from '../EditButton/EditButton';
+import DeleteButton from '../DeleteButton/DeleteButton';
 
 const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
     const [showEditForm, setShowEditForm] = useState(false);
@@ -71,6 +72,10 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
                         reps={exercise.reps}
                         weight={exercise.weight}
                     />
+                    <DeleteButton 
+                        id={exercise.id}
+                        setDate={setDate}
+                    />
                 </Fragment>
             );
         });
@@ -87,7 +92,6 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
     };
 
     const onAddClick = () => {
-        console.log('click add button from view workout')
         setShowAddForm(true);
     };
 
