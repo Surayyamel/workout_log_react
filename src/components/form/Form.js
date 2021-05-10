@@ -2,7 +2,6 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 function App({ onFormSubmit, date, title, prefillData }) {
-
     const defaultValues = {
         exerciseName: '',
         numberOfSets: 0,
@@ -32,7 +31,11 @@ function App({ onFormSubmit, date, title, prefillData }) {
     });
 
     const onSubmit = (data) => {
+        if (prefillData) {
+            data.id = Number(prefillData.id);
+        }
         onFormSubmit(data);
+
     };
 
     // Watch to enable rerender when sets number is changed

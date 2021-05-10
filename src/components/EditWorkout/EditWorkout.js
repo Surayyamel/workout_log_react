@@ -1,16 +1,21 @@
-// On Edit click, change, workoutNames to prefilled Form. 
-// Create a new Edit component, import Form into it and pass the requestedData as props to prefill the Form state
-
-import React, { useState } from 'react';
+import React from 'react';
 import Form from '../form/Form';
+import { format } from 'date-fns';
 
-const EditWorkout = ({ date, prefillData }) => {
+
+const EditWorkout = ({ date, prefillData, setDate }) => {
  
-    const onSubmit = (formData) => {
+    const onSubmit = async (formData) => {
         // This is to send the put request
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData),
+        };
+        await fetch(`http://localhost:3001/workout/1/${date}`, requestOptions);
 
-        console.log(formData)
-      
+        // To re-render the home page and GET/show the updated list
+        setDate(format(new Date(), 'dd MM yyyy'));
     }
 
     return (

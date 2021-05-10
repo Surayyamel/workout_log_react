@@ -3,40 +3,45 @@ import EditWorkout from '../EditWorkout/EditWorkout';
 import AddWorkout from '../AddWorkout/AddWorkout';
 import EditButton from '../EditButton/EditButton';
 
-const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit }) => {
+const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
     const [showEditForm, setShowEditForm] = useState(false);
     const [showAddForm, setShowAddForm] = useState(false);
     const [editFormData, setEditFormData] = useState({
+        id: 'id',
         name: '',
         sets: 0,
         reps: [],
-        weight: []
-    })
+        weight: [],
+    });
 
     const exerciseArray = [];
     (function pushExercisesToArray(workout) {
         for (const exercise in workout) {
             exerciseArray.push(workout[exercise]);
         }
+        for (let i = 0; i < exerciseArray.length; i++) {
+            const keys = Object.keys(workout);
+            exerciseArray[i].id = keys[i];
+        }
     })(requestedWorkoutData);
-   
 
-    const onEditClick = (name, sets, reps, weight) => {
-        //console.log(name, sets, reps, weight)
+    // Callback from EditButton component
+    const onEditClick = (id, name, sets, reps, weight) => {
         setEditFormData({
-            name: name, 
-            sets: sets, 
-            reps: reps, 
-            weight: weight
-        })
-        
+            id: id,
+            name: name,
+            sets: sets,
+            reps: reps,
+            weight: weight,
+        });
+
         setShowEditForm(true);
     };
 
-   
     const list = [];
     (function renderExerciseList() {
         exerciseArray.map((exercise, i) => {
+            
             list.push(
                 <Fragment key={i}>
                     <table>
@@ -46,20 +51,30 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit }) => {
                             </tr>
                             <tr>
                                 <td>Reps</td>
-                                {exercise.reps.map((rep, i) => <td key={i}>{rep}</td>)}  
+                                {exercise.reps.map((rep, i) => (
+                                    <td key={i}>{rep}</td>
+                                ))}
                             </tr>
                             <tr>
                                 <td>Weight</td>
-                                {exercise.weight.map((weight, i) => <td key={i}>{weight}</td>)}
+                                {exercise.weight.map((weight, i) => (
+                                    <td key={i}>{weight}</td>
+                                ))}
                             </tr>
                         </tbody>
                     </table>
-                    <EditButton onEditClick={onEditClick} name={exercise.name} sets={exercise.sets} reps={exercise.reps} weight={exercise.weight}/>
+                    <EditButton
+                        onEditClick={onEditClick}
+                        id={exercise.id}
+                        name={exercise.name}
+                        sets={exercise.sets}
+                        reps={exercise.reps}
+                        weight={exercise.weight}
+                    />
                 </Fragment>
             );
         });
-    })()
-
+    })();
 
     useEffect(() => {
         reset();
@@ -71,23 +86,19 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit }) => {
         }
     };
 
-    
     const onAddClick = () => {
+        console.log('click add button from view workout')
         setShowAddForm(true);
     };
 
     const onAddSubmit = (data) => {
+        setShowAddForm(false);
         onFormSubmit(data);
     };
 
     const renderForms = () => {
         if (showEditForm) {
-            return (
-                <EditWorkout
-                    date={date}
-                    prefillData={editFormData}
-                />
-            );
+            return <EditWorkout date={date} prefillData={editFormData} setDate={setDate} />;
         } else if (showAddForm) {
             return (
                 <div>
@@ -102,7 +113,6 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit }) => {
                 <div>{date}</div>
                 {list}
 
-                
                 <button onClick={onAddClick}>Add</button>
             </div>
         );
