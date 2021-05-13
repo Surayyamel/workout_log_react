@@ -12,15 +12,16 @@ const Home = () => {
     const [formData, setFormData] = useState(() => {});
     // Data received from the DB request
     const [requestedWorkoutData, setRequestedWorkoutData] = useState(() => []);
-    
+
     const getCurrentWorkout = async () => {
         const requestOptions = {
             method: 'GET',
-        }
+        };
         const response = await fetch(
-            `http://localhost:3001/workout/1/${date}`, requestOptions
+            `http://localhost:3001/workout/1/${date}`,
+            requestOptions
         );
-        
+
         const jsonData = await response.json();
 
         setRequestedWorkoutData(() => jsonData);
@@ -76,6 +77,3 @@ const Home = () => {
 };
 
 export default Home;
-
-// Edit workout
-// Pass the requested values as props into the state to pre-populate the fields
