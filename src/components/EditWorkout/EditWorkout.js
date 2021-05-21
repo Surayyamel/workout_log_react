@@ -1,28 +1,35 @@
 import React from 'react';
 import Form from '../form/Form';
-import { format } from 'date-fns';
 
-
-const EditWorkout = ({ date, prefillData, setDate }) => {
- 
+const EditWorkout = ({ date, prefillData, setDate, removeEditForm }) => {
     const onSubmit = async (formData) => {
-        // This is to send the put request
+        
         const requestOptions = {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(formData),
         };
-        await fetch(`http://localhost:3001/workout/1/${date}`, requestOptions);
-
+        await fetch(`http://localhost:3001/workout/${date}`, requestOptions);
+       
+        // Callback to view workout
+        removeEditForm();
         // To re-render the home page and GET/show the updated list
-        setDate(format(new Date(), 'dd MM yyyy'));
-    }
+        setDate('2000-01-01');
+    };
 
     return (
         <div>
-            <Form onFormSubmit={onSubmit} date={date} title="Edit Workout" prefillData={prefillData} />
+            <Form
+                onFormSubmit={onSubmit}
+                date={date}
+                title="Edit Exercise"
+                prefillData={prefillData}
+            />
         </div>
     );
-}
+};
 
 export default EditWorkout;

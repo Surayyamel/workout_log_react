@@ -1,8 +1,9 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import EditWorkout from '../EditWorkout/EditWorkout';
 import AddWorkout from '../AddWorkout/AddWorkout';
 import EditButton from '../EditButton/EditButton';
 import DeleteButton from '../DeleteButton/DeleteButton';
+import WorkoutName from '../WorkoutName/WorkoutName';
 
 const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
     const [showEditForm, setShowEditForm] = useState(false);
@@ -15,6 +16,7 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
         weight: [],
     });
 
+    // Sort exercise list
     const exerciseArray = [];
     (function pushExercisesToArray(workout) {
         for (const exercise in workout) {
@@ -35,15 +37,14 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
             reps: reps,
             weight: weight,
         });
-
         setShowEditForm(true);
     };
 
+    // Render exercise list
     const list = [];
     (function renderExerciseList() {
         exerciseArray.map((exercise, i) => {
-            
-            list.push(
+            return list.push(
                 <Fragment key={i}>
                     <table>
                         <tbody>
@@ -72,40 +73,47 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
                         reps={exercise.reps}
                         weight={exercise.weight}
                     />
-                    <DeleteButton 
-                        id={exercise.id}
-                        setDate={setDate}
-                    />
+                    <DeleteButton id={exercise.id} setDate={setDate} />
                 </Fragment>
             );
         });
     })();
 
-    useEffect(() => {
-        reset();
-    }, [date]);
-
-    const reset = () => {
+    // Called in EditWorkout after Edit form submit
+    const removeEditForm = () => {
         if (showEditForm) {
             setShowEditForm(false);
         }
     };
 
+    // Show add exercise form
     const onAddClick = () => {
         setShowAddForm(true);
     };
 
+    // Submit add exercise form
     const onAddSubmit = (data) => {
         setShowAddForm(false);
         onFormSubmit(data);
     };
 
+    // Show edit form, add form or just the exercise list
     const renderForms = () => {
         if (showEditForm) {
-            return <EditWorkout date={date} prefillData={editFormData} setDate={setDate} />;
+            return (
+                <div>
+                    <EditWorkout
+                        date={date}
+                        prefillData={editFormData}
+                        setDate={setDate}
+                        removeEditForm={removeEditForm}
+                    />
+                </div>
+            );
         } else if (showAddForm) {
             return (
                 <div>
+                    <WorkoutName date={date} />
                     <div>{date}</div>
                     {list}
                     <AddWorkout date={date} onFormSubmit={onAddSubmit} />
@@ -114,10 +122,9 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
         }
         return (
             <div>
-                <div>{date}</div>
+                <WorkoutName date={date} />
                 {list}
-
-                <button onClick={onAddClick}>Add</button>
+                <button onClick={onAddClick}>Add exercise</button>
             </div>
         );
     };

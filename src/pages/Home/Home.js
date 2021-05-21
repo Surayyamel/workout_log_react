@@ -3,34 +3,35 @@ import { format } from 'date-fns';
 import Calendar from '../../components/calendar/Calendar';
 import AddWorkout from '../../components/AddWorkout/AddWorkout';
 import ViewWorkout from '../../components/ViewWorkout/ViewWorkout';
+import WorkoutName from '../../components/WorkoutName/WorkoutName';
 
-const formattedDate = format(new Date(), 'dd MM yyyy');
+const formattedDate = format(new Date(), 'yyyy-MM-dd');
 
 const Home = () => {
     const [date, setDate] = useState(formattedDate);
-    // Data collected from the Form submission
-    const [formData, setFormData] = useState(() => {});
-    // Data received from the DB request
     const [requestedWorkoutData, setRequestedWorkoutData] = useState(() => []);
-
-    const getCurrentWorkout = async () => {
-        const requestOptions = {
-            method: 'GET',
-        };
-        const response = await fetch(
-            `http://localhost:3001/workout/1/${date}`,
-            requestOptions
-        );
-
-        const jsonData = await response.json();
-
-        setRequestedWorkoutData(() => jsonData);
-    };
-
+   
+    // getCurrentWorkout inside the effect hook to remove the dependency issue
     useEffect(() => {
-        // Request to API for specific workout
+        const getCurrentWorkout = async () => {
+            const requestOptions = {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            const response = await fetch(
+                `http://localhost:3001/workout/${date}`,
+                requestOptions
+            );
+
+            const jsonData = await response.json();
+
+            setRequestedWorkoutData(() => jsonData);
+        };
         getCurrentWorkout();
-    }, [date, setRequestedWorkoutData, formData]);
+    }, [date]);
 
     // Callback for Calendar component
     const onDateChange = (date) => {
@@ -39,22 +40,30 @@ const Home = () => {
 
     // Callback for Form component on submit
     const onFormSubmit = async (formData) => {
-        setFormData(() => formData);
-
+        console.log('submitting form')
         const requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(formData),
         };
-        await fetch(`http://localhost:3001/workout/1/${date}`, requestOptions);
+        await fetch(`http://localhost:3001/workout/${date}`, requestOptions);
 
-        // Rerender to see the newly posted exercise
-        setDate(format(new Date(), 'dd MM yyyy'));
+        // Force a rerender (because date is a string cannot be todays date or will not rerender) to see the newly posted exercise. 
+        setDate('2000-01-01');
     };
 
+   
     const renderAddWorkout = () => {
         if (Object.keys(requestedWorkoutData).length === 0) {
-            return <AddWorkout onFormSubmit={onFormSubmit} date={date} />;
+            return (
+                <div>
+                    <WorkoutName date={date} />
+                    <AddWorkout onFormSubmit={onFormSubmit} date={date} />
+                </div>
+            );
         } else {
             return (
                 <ViewWorkout
@@ -70,7 +79,9 @@ const Home = () => {
     return (
         <Fragment>
             <h1>Workout Log</h1>
+
             <Calendar onDateChange={onDateChange} />
+
             {renderAddWorkout()}
         </Fragment>
     );

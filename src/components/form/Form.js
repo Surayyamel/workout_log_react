@@ -11,10 +11,10 @@ function App({ onFormSubmit, date, title, prefillData }) {
         defaultValues.exerciseName = prefillData.name;
         defaultValues.numberOfSets = prefillData.sets;
         prefillData.reps.map((rep, i) => {
-            defaultValues[`reps${i}`] = rep;
+            return defaultValues[`reps${i}`] = rep;
         });
         prefillData.weight.map((weight, i) => {
-            defaultValues[`weight${i}`] = weight;
+            return defaultValues[`weight${i}`] = weight;
         });
     }
 
@@ -23,7 +23,6 @@ function App({ onFormSubmit, date, title, prefillData }) {
         register,
         handleSubmit,
         watch,
-        reset,
         formState: { errors },
     } = useForm({
         mode: 'onBlur',
@@ -46,10 +45,7 @@ function App({ onFormSubmit, date, title, prefillData }) {
         return [...Array(parseInt(watchNumberOfSets || 0)).keys()];
     };
 
-    const onReset = () => {
-        reset();
-    };
-
+   
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <h3>{title}</h3>
@@ -102,9 +98,7 @@ function App({ onFormSubmit, date, title, prefillData }) {
             ))}
 
             <button type="submit">Add</button>
-            <button type="reset" onClick={onReset}>
-                Reset
-            </button>
+            
         </form>
     );
 }
