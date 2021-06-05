@@ -1,0 +1,10 @@
+@import '../../styles/mixins/buttons.scss';
+
+.exercise-list {
+    &__button {
+        @include button;
+        &--delete {
+            @include button--delete;
+        }
+    }
+}

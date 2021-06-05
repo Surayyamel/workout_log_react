@@ -11,7 +11,9 @@ const EditWorkout = ({ date, prefillData, setDate, removeEditForm }) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(formData),
+           
         };
+        
         await fetch(`http://localhost:3001/workout/${date}`, requestOptions);
        
         // Callback to view workout
@@ -24,10 +26,11 @@ const EditWorkout = ({ date, prefillData, setDate, removeEditForm }) => {
         <div>
             <Form
                 onFormSubmit={onSubmit}
-                date={date}
                 title="Edit Exercise"
                 prefillData={prefillData}
+                buttonName="Edit"
             />
+            <button onClick={removeEditForm} className="exercise-list__add-exercise-cancel-button">Cancel</button>
         </div>
     );
 };

@@ -1,6 +1,11 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import Home from '../Home/Home';
-// remove react-router
+import { FcGoogle } from 'react-icons/fc';
+import { IconContext } from 'react-icons';
+import './App.scss';
+
+// write tests
+// host fontend, backend and DB on heroku
 
 const App = () => {
     const [loggedIn, setLoggedIn] = useState(false);
@@ -30,23 +35,35 @@ const App = () => {
         if (loggedIn) {
             return (
                 <a href="http://localhost:3001/logout">
-                    <button>Log out</button>
+                    <button className="google-button__sign-out">Log out</button>
                 </a>
             );
         } else {
             return (
-                <a href="http://localhost:3001/auth/google">
-                    <button>Log in with google</button>
-                </a>
+                <div>
+                    <p className="google-button__upper-text">To start tracking your weights...</p>
+                    <a href="http://localhost:3001/auth/google">
+                        <button className="google-button__sign-in">
+                            <IconContext.Provider
+                                value={{ className: 'google-button__icon' }}
+                            >
+                                <FcGoogle />
+                            </IconContext.Provider>
+                            <span className="google-button__sign-in-text">
+                                Sign in with Google
+                            </span>
+                        </button>
+                    </a>
+                </div>
             );
         }
     };
 
     return (
-        <Fragment>
-            {renderButtons()}
+        <div className="main-container">
+            <div className="log-buttons-container">{renderButtons()}</div>
             <Home />
-        </Fragment>
+        </div>
     );
 };
 

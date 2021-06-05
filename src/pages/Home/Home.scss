@@ -1,0 +1,57 @@
+@import '../../styles/mixins/responsive-breakpoints.scss';
+
+.main-content-container {
+    display: flex;
+    height: 90vh;
+    @include respond(phone) {
+        flex-direction: column;
+    }
+    @include respond(tab-land) {
+        flex-direction: column;
+    }
+}
+
+.calendar__main-title {
+    margin: 0 auto;
+    width: 50%;
+    padding: 1rem;
+    @include respond(phone) {
+        font-size: 1.2rem;
+        padding: 1rem 0 0.5rem 0;
+    }
+    @include respond(tab) {
+        flex-direction: column;
+    }
+}
+
+.calendar-container {
+    width: 100%;
+    margin: 1rem 2rem;
+    border-radius: 1%;
+    @include respond(phone) {
+        margin: 0.3rem;
+        padding-bottom: 1rem;
+    }
+    @include respond(tab-land) {
+        margin: 0 auto;
+        padding-bottom: 2rem;
+        width: 90%;
+        font-size: 1.5rem;
+    }
+    @include respond(phone) {
+        font-size: 1rem
+    }
+}
+
+.workout-container {
+    height: 85%;
+    width: 100%;
+    margin: 1rem 2rem;
+    @include respond(phone) {
+        margin: 0.3rem;
+    }
+    @include respond(tab-land) {
+        margin: 0 auto;
+        width: 90%;
+    }
+}

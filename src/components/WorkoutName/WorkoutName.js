@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { AiFillEdit, AiFillDelete } from "react-icons/ai";
+import './WorkoutName.scss';
 
 const WorkoutName = ({ date }) => {
     const [showEditForm, setShowEditForm] = useState(false);
@@ -91,8 +93,8 @@ const WorkoutName = ({ date }) => {
             },
             body: JSON.stringify({
                 name: editFormWorkoutName,
-                date: date,
-            }),
+                date: date
+            })
         };
         const response = await fetch(
             `http://localhost:3001/workout/${date}/name`,
@@ -103,37 +105,54 @@ const WorkoutName = ({ date }) => {
         setShowEditForm(false);
     };
 
+    // Delete request for workout name
+    const onWorkoutNameDelete = async () => {
+        const requestOptions = {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+        await fetch(`http://localhost:3001/workout/${date}/name`, requestOptions);
+        setrequestedWorkoutName(null);
+    }
+
     const renderWorkoutName = () => {
         if (showEditForm) {
             return (
-                <div>
+                <div className="workout-name__form-container">
                     <input
                         name="editInput"
                         onChange={onWorkoutNameInputChange}
                         value={editFormWorkoutName}
+                        className="workout-name__input"
                     />
-                    <button onClick={onEditFormSubmit}>Ok</button>
+                    <button onClick={onEditFormSubmit} className="workout-name__button workout-name__button--add">Ok</button>
                 </div>
             );
         } else if (requestedWorkoutName && requestedWorkoutName !== 'No name') {
             return (
-                <div>
-                    <h2>{requestedWorkoutName}</h2>
-                    <button onClick={onWorkoutNameEditClick}>Edit</button>
+                <div className="workout-name__title-container">
+                    <h2 className="workout-name__title">{requestedWorkoutName}</h2>
+                    <button onClick={onWorkoutNameEditClick} className="workout-name__button workout-name__button--edit"><AiFillEdit/></button>
+                    <button onClick={onWorkoutNameDelete}className="workout-name__button workout-name__button--delete"><AiFillDelete/></button>
                 </div>
             );
         } else {
             return (
-                <div>
-                    <form onSubmit={onWorkoutNameSubmit}>
+                <div className="workout-name__form-container">
+                    <form onSubmit={onWorkoutNameSubmit} className="workout-name__form">
                         <input
                             placeholder="Workout name"
                             type="text"
                             onChange={onWorkoutNameInputChange}
                             value={workoutName}
                             name="addInput"
+                            required
+                            className="workout-name__input"
                         />
-                        <button type="submit">Add</button>
+                        <button type="submit" className="workout-name__button workout-name__button--add">Add</button>
                     </form>
                 </div>
             );

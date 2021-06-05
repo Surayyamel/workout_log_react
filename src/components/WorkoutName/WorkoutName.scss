@@ -1,0 +1,57 @@
+@import '../../styles/mixins/buttons.scss';
+@import '../../styles/mixins/responsive-breakpoints.scss';
+
+.workout-name {
+    &__form {
+        @include respond(phone) {
+            display: flex;
+        }
+    }
+    &__form-container {
+        margin: 0rem auto;
+        width: 50%;
+        @include respond(phone) {
+            margin: 0 3rem;
+        }
+        
+    }
+    &__title-container {
+        display: flex;
+        justify-content: center;
+        padding: 1rem;
+        
+    }
+    &__title {
+        padding: 0 .5rem;
+    }
+    &__input {
+        margin: 1rem .5rem;
+        padding: 0.4rem 0.9rem;
+        border: 1px solid orange;
+        border-radius: 3px;
+        @include respond(phone) {
+            margin: 0;
+        }
+        @include respond(tab-land) {
+            font-size: 1.7rem
+        }
+        @include respond(phone) {
+            font-size: 1rem
+        }
+    }
+    &__button {
+        @include button;
+        &--add {
+            @include button--add;
+            @include respond(phone) {
+                margin-left: .7rem;
+            }
+        }
+        &--edit {
+            @include button--edit;
+        }
+        &--delete {
+            @include button--delete;
+        }
+    }
+}

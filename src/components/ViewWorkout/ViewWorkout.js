@@ -1,9 +1,10 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
 import EditWorkout from '../EditWorkout/EditWorkout';
 import AddWorkout from '../AddWorkout/AddWorkout';
 import EditButton from '../EditButton/EditButton';
 import DeleteButton from '../DeleteButton/DeleteButton';
 import WorkoutName from '../WorkoutName/WorkoutName';
+import './ViewWorkout.scss';
 
 const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
     const [showEditForm, setShowEditForm] = useState(false);
@@ -45,36 +46,46 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
     (function renderExerciseList() {
         exerciseArray.map((exercise, i) => {
             return list.push(
-                <Fragment key={i}>
-                    <table>
+                <div key={i} className="exercise-list__container">
+                    <h4 className="exercise-list__name">{exercise.name}</h4>
+                    <table className="exercise-list__table">
                         <tbody>
                             <tr>
-                                <th>{exercise.name}</th>
-                            </tr>
-                            <tr>
-                                <td>Reps</td>
+                                <td className="exercise-list__table">Reps</td>
                                 {exercise.reps.map((rep, i) => (
-                                    <td key={i}>{rep}</td>
+                                    <td
+                                        key={i}
+                                        className="exercise-list__table"
+                                    >
+                                        {rep}
+                                    </td>
                                 ))}
                             </tr>
                             <tr>
-                                <td>Weight</td>
+                                <td className="exercise-list__table">Weight</td>
                                 {exercise.weight.map((weight, i) => (
-                                    <td key={i}>{weight}</td>
+                                    <td
+                                        key={i}
+                                        className="exercise-list__table"
+                                    >
+                                        {weight}
+                                    </td>
                                 ))}
                             </tr>
                         </tbody>
                     </table>
-                    <EditButton
-                        onEditClick={onEditClick}
-                        id={exercise.id}
-                        name={exercise.name}
-                        sets={exercise.sets}
-                        reps={exercise.reps}
-                        weight={exercise.weight}
-                    />
-                    <DeleteButton id={exercise.id} setDate={setDate} />
-                </Fragment>
+                    <div className="exercise-list__buttons-container">
+                        <EditButton
+                            onEditClick={onEditClick}
+                            id={exercise.id}
+                            name={exercise.name}
+                            sets={exercise.sets}
+                            reps={exercise.reps}
+                            weight={exercise.weight}
+                        />
+                        <DeleteButton id={exercise.id} setDate={setDate} />
+                    </div>
+                </div>
             );
         });
     })();
@@ -97,6 +108,10 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
         onFormSubmit(data);
     };
 
+    const onCancelAddClick = () => {
+        setShowAddForm(false);
+    };
+
     // Show edit form, add form or just the exercise list
     const renderForms = () => {
         if (showEditForm) {
@@ -114,17 +129,28 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
             return (
                 <div>
                     <WorkoutName date={date} />
-                    <div>{date}</div>
-                    {list}
-                    <AddWorkout date={date} onFormSubmit={onAddSubmit} />
+                    <div>
+                        
+                        <AddWorkout date={date} onFormSubmit={onAddSubmit} />
+                        <button onClick={onCancelAddClick} className="exercise-list__add-exercise-cancel-button">Cancel</button>
+                    </div>
                 </div>
             );
         }
         return (
             <div>
                 <WorkoutName date={date} />
-                {list}
-                <button onClick={onAddClick}>Add exercise</button>
+                <div className="exercise-list__main-container">
+                    {list}
+                    <div className="exercise-list__add-exercise-button-container">
+                        <button
+                            onClick={onAddClick}
+                            className="exercise-list__button--add-exercise"
+                        >
+                            Add exercise
+                        </button>
+                    </div>
+                </div>
             </div>
         );
     };

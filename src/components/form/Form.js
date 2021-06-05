@@ -1,7 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import './Form.scss';
 
-function App({ onFormSubmit, date, title, prefillData }) {
+function App({ onFormSubmit, title, prefillData, buttonName }) {
     const defaultValues = {
         exerciseName: '',
         numberOfSets: 0,
@@ -34,7 +35,6 @@ function App({ onFormSubmit, date, title, prefillData }) {
             data.id = Number(prefillData.id);
         }
         onFormSubmit(data);
-
     };
 
     // Watch to enable rerender when sets number is changed
@@ -47,23 +47,25 @@ function App({ onFormSubmit, date, title, prefillData }) {
 
    
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <h3>{title}</h3>
+        <form onSubmit={handleSubmit(onSubmit)} className="form__container">
+            <h3 className="form__title">{title}</h3>
             <label>Exercise Name:</label>
             <input
                 id="exerciseName"
                 {...register('exerciseName', {
-                    required: 'Please enter exercise name',
+                    required: 'Please enter an exercise name',
                 })}
+                className="form__input--exercise-name"
             />
             <br />
-            {errors.exerciseName && errors.exerciseName.message}
+            <p className="form__error-message">{errors.exerciseName && errors.exerciseName.message}</p>
             <br />
             <label>Number of Sets:</label>
             <select
                 {...register('numberOfSets', {
-                    required: 'Please enter a valid number',
+                    required: 'Please choose a number',
                 })}
+                className="form__dropdown"
             >
                 {['', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => {
                     return (
@@ -73,10 +75,12 @@ function App({ onFormSubmit, date, title, prefillData }) {
                     );
                 })}
             </select>
+            <p className="form__error-message">{errors.numberOfSets && errors.numberOfSets.message}</p>
+            
 
             {setsNumbers().map((i) => (
                 <div key={i}>
-                    <h5>Set {i + 1}</h5>
+                    <h5 className="form__set-number">Set {i + 1}</h5>
                     <label>Reps:</label>
                     <input
                         {...register(`reps${i}`, {
@@ -84,6 +88,7 @@ function App({ onFormSubmit, date, title, prefillData }) {
                         })}
                         type="number"
                         min="0"
+                        className="form__input--reps"
                     />
 
                     <label>Weight:</label>
@@ -93,11 +98,12 @@ function App({ onFormSubmit, date, title, prefillData }) {
                         })}
                         type="number"
                         min="0"
+                        className="form__input--weight"
                     />
                 </div>
             ))}
 
-            <button type="submit">Add</button>
+            <button type="submit" className="form__button form__button--add">{buttonName}</button>
             
         </form>
     );

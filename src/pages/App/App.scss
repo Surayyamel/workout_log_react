@@ -1,0 +1,56 @@
+@import '../../styles/mixins/responsive-breakpoints.scss';
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-size: 62.5%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    box-sizing: border-box;
+}
+
+.main-container {
+    padding: 1rem;
+    font-size: 1rem;
+    height: 100vh;
+}
+
+.log-buttons-container {
+    margin-top: 0.5rem;
+    margin-left: 3rem;
+    @include respond(phone) {
+        margin-left: 0;
+    }
+}
+
+.google-button {
+    &__sign-in {
+        padding: 0.5rem;
+        background-color: white;
+        border: 1px solid rgb(235, 235, 235);
+        border-radius: 3px;
+        box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+    }
+    &__sign-in-text {
+        padding-left: 0.5rem;
+    }
+    &__upper-text {
+        font-size: 0.8rem;
+        padding-bottom: 1rem;
+    }
+    &__icon {
+        font-size: 1.5rem;
+        vertical-align: middle;
+    }
+    &__sign-out {
+        padding: 0.5rem;
+        background-color: white;
+        border: 1px solid rgb(235, 235, 235);
+        border-radius: 3px;
+        box-shadow: 0 1.5px 3px 0 rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+    }
+}

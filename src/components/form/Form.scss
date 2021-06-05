@@ -1,0 +1,75 @@
+/* Mixin for inputs */
+@import '../../styles/mixins/input-field.scss';
+@import '../../styles/mixins/buttons.scss';
+@import '../../styles/mixins/responsive-breakpoints.scss';
+
+.form {
+    &__container {
+        border: 1px solid orange;
+        border-radius: 3px;
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background-color: #faf8f2;
+        max-height: 35rem;
+        overflow: scroll;
+        @include respond(small-phone) {
+            font-size: 0.8rem;
+            
+        }
+        @include respond(tab-land) {
+            margin-bottom: 3rem;
+        }
+    }
+    &__title {
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+    }
+    &__input {
+        &--exercise-name {
+            @include input-field;
+            margin: 0.2rem 0.5rem;
+            @include respond(small-phone) {
+                font-size: 0.6rem;
+                margin: 0.3rem 0;
+            }
+        }
+        &--reps {
+            @include input-field;
+            width: 4rem;
+            margin-right: 1.6rem;
+            @include respond(phone) {
+                margin: 0.2rem 0.6rem 0.2rem 0.2rem;
+            }
+        }
+        &--weight {
+            @include input-field;
+            width: 4rem;
+            @include respond(phone) {
+                margin: 0.2rem;
+            }
+        }
+    }
+    &__set-number {
+        margin-top: 0.8rem;
+        margin-bottom: 0.3rem;
+        @include respond(tab-land) {
+            margin-top: 1rem;
+            margin-bottom: .5rem;
+        }
+    }
+    &__error-message {
+        color: orange;
+        font-size: 0.8rem;
+        font-style: italic;
+    }
+    &__dropdown {
+        @include input-field;
+        background-color: white;
+    }
+    &__button {
+        @include button;
+        &--add {
+            @include button--add;
+        }
+    }
+}

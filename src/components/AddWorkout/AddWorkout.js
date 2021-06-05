@@ -8,8 +8,8 @@ const AddWorkout = ({ onFormSubmit, date }) => {
         <Fragment>
             <Form
                 onFormSubmit={onFormSubmit}
-                date={date}
                 title="Add Exercise"
+                buttonName="Add"
             />
         </Fragment>
     );

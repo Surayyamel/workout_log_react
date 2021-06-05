@@ -1,4 +1,6 @@
 import React from 'react';
+import { AiFillDelete } from "react-icons/ai"
+import './DeleteButton.scss';
 
 const DeleteButton = ({ id, setDate }) => {
     const onDeleteClick = async () => {
@@ -20,7 +22,7 @@ const DeleteButton = ({ id, setDate }) => {
 
     return (
         <div>
-            <button onClick={onDeleteClick}>Delete</button>
+            <button onClick={onDeleteClick} className="exercise-list__button exercise-list__button--delete"><AiFillDelete/></button>
         </div>
     );
 };
