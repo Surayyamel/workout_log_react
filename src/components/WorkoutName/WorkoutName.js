@@ -83,7 +83,8 @@ const WorkoutName = ({ date }) => {
         setShowEditForm(true);
     };
 
-    const onEditFormSubmit = async () => {
+    const onEditFormSubmit = async (e) => {
+        e.preventDefault();
         const requestOptions = {
             method: 'PUT',
             credentials: 'include',
