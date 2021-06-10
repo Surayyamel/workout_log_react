@@ -2,7 +2,7 @@ import React from 'react';
 import { AiFillDelete } from "react-icons/ai"
 import './DeleteButton.scss';
 
-const DeleteButton = ({ id, setDate }) => {
+const DeleteButton = ({ exerciseId, setDate }) => {
     const onDeleteClick = async () => {
         const requestOptions = {
             method: 'DELETE',
@@ -10,10 +10,10 @@ const DeleteButton = ({ id, setDate }) => {
             headers: { 
                 'Content-Type': 'application/json' 
             },
-            body: JSON.stringify({id: id}),
+            body: JSON.stringify({id: exerciseId}),
         };
-        
-        await fetch(`http://localhost:3001/workout/1/`, requestOptions);
+       
+        await fetch(`http://localhost:3001/workout`, requestOptions);
 
         // To re-render the home page and GET/show the updated list
         setDate('2000-01-01');

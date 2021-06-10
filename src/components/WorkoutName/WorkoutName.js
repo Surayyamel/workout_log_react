@@ -4,7 +4,7 @@ import './WorkoutName.scss';
 
 const WorkoutName = ({ date }) => {
     const [showEditForm, setShowEditForm] = useState(false);
-    // Input values for add and edit workout name forms
+    // Input values for Add and Edit workout name forms
     const [workoutName, setWorkoutName] = useState('');
     const [editFormWorkoutName, setEditFormWorkoutName] = useState('');
     // Returned name from POST request, updated so as to force a rerender
@@ -13,7 +13,7 @@ const WorkoutName = ({ date }) => {
     const [requestedWorkoutName, setrequestedWorkoutName] = useState(null);
 
     useEffect(() => {
-        // isMounted fix to state update on unmounted component
+        // isMounted fix to the state update on an unmounted component
         let isMounted = true;
         const getWorkoutName = async () => {
             const requestOptions = {
@@ -84,7 +84,6 @@ const WorkoutName = ({ date }) => {
     };
 
     const onEditFormSubmit = async () => {
-        // Make a put request
         const requestOptions = {
             method: 'PUT',
             credentials: 'include',
@@ -109,10 +108,7 @@ const WorkoutName = ({ date }) => {
     const onWorkoutNameDelete = async () => {
         const requestOptions = {
             method: 'DELETE',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            credentials: 'include'
         };
         await fetch(`http://localhost:3001/workout/${date}/name`, requestOptions);
         setrequestedWorkoutName(null);
@@ -121,15 +117,17 @@ const WorkoutName = ({ date }) => {
     const renderWorkoutName = () => {
         if (showEditForm) {
             return (
-                <div className="workout-name__form-container">
+                <form className="workout-name__form-container" onSubmit={onEditFormSubmit} >
                     <input
                         name="editInput"
+                        type="text"
                         onChange={onWorkoutNameInputChange}
                         value={editFormWorkoutName}
                         className="workout-name__input"
+                        required
                     />
-                    <button onClick={onEditFormSubmit} className="workout-name__button workout-name__button--add">Ok</button>
-                </div>
+                    <button className="workout-name__button workout-name__button--add">Ok</button>
+                </form>
             );
         } else if (requestedWorkoutName && requestedWorkoutName !== 'No name') {
             return (

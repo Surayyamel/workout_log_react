@@ -10,17 +10,14 @@ const formattedDate = format(new Date(), 'yyyy-MM-dd');
 
 const Home = () => {
     const [date, setDate] = useState(formattedDate);
-    const [requestedWorkoutData, setRequestedWorkoutData] = useState(() => []);
-
+    const [requestedWorkoutData, setRequestedWorkoutData] = useState([]);
+    
     // getCurrentWorkout inside the effect hook to remove the dependency issue
     useEffect(() => {
         const getCurrentWorkout = async () => {
             const requestOptions = {
                 method: 'GET',
                 credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
             };
             const response = await fetch(
                 `http://localhost:3001/workout/${date}`,
@@ -34,14 +31,13 @@ const Home = () => {
         getCurrentWorkout();
     }, [date]);
 
-    // Callback for Calendar component
+    // Callback for Calendar component, updates the currently selected date
     const onDateChange = (date) => {
         setDate(date);
     };
 
     // Callback for Form component on submit
     const onFormSubmit = async (formData) => {
-        console.log('submitting form');
         const requestOptions = {
             method: 'POST',
             credentials: 'include',
@@ -52,16 +48,17 @@ const Home = () => {
         };
         await fetch(`http://localhost:3001/workout/${date}`, requestOptions);
 
-        // Force a rerender (because date is a string cannot be todays date or will not rerender) to see the newly posted exercise.
+        // Force a rerender (because date is a string & cannot be todays date or will not rerender), to see the newly posted exercise.
         setDate('2000-01-01');
     };
 
     const renderAddWorkout = () => {
         if (Object.keys(requestedWorkoutData).length === 0) {
+            // If there is no workout for selected date
             return (
                 <div>
                     <WorkoutName date={date} />
-                    <AddWorkout onFormSubmit={onFormSubmit} date={date} />
+                    <AddWorkout onFormSubmit={onFormSubmit} />
                 </div>
             );
         } else {
@@ -76,18 +73,14 @@ const Home = () => {
         }
     };
 
-    // Put each block inside a div for styling
-
     return (
         <div className="main-content-container">
             <div className="calendar-container">
                 <h1 className="calendar__main-title">Workout Log</h1>
-                {/* First block */}
                 <Calendar onDateChange={onDateChange} />
             </div>
 
             <div className="workout-container">
-                {/* Second block */}
                 {renderAddWorkout()}
             </div>
         </div>

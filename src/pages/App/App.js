@@ -4,12 +4,10 @@ import { FcGoogle } from 'react-icons/fc';
 import { IconContext } from 'react-icons';
 import './App.scss';
 
-// write tests
-// host fontend, backend and DB on heroku
-
 const App = () => {
     const [loggedIn, setLoggedIn] = useState(false);
 
+    // Check to see if a user is logged in
     useEffect(() => {
         isLoggedIn();
     });
@@ -26,9 +24,11 @@ const App = () => {
             'http://localhost:3001/loggedin',
             requestOptions
         );
-        const jsonData = await response.json();
 
-        setLoggedIn(jsonData);
+        // True or false
+        const loggedInStatus = await response.json();
+
+        setLoggedIn(loggedInStatus);
     };
 
     const renderButtons = () => {

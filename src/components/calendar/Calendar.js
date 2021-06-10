@@ -3,8 +3,6 @@ import Calendar from 'react-calendar';
 import { format } from 'date-fns';
 import './Calendar.css';
 
-// Disable adding workouts for future dates?
-
 const ReactCalendar = ({ onDateChange }) => {
     const [date, setDate] = useState(new Date());
     const [filledDatesArray, setFilledDatesArray] = useState([]);
@@ -12,6 +10,7 @@ const ReactCalendar = ({ onDateChange }) => {
     const formattedDate = format(date, 'yyyy-MM-dd');
 
     useEffect(() => {
+        // Callback from Home component, updates the date state
         onDateChange(formattedDate);
     }, [onDateChange, formattedDate]);
 
@@ -23,15 +22,14 @@ const ReactCalendar = ({ onDateChange }) => {
         const fetchDates = async () => {
             const requestOptions = {
                 method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                credentials: 'include'
             };
             const response = await fetch(
                 `http://localhost:3001/workout/${date}/filled`,
                 requestOptions
             );
+
+            // Array of dates that have either an exercise or workout name
             const jsonData = await response.json();
             return jsonData;
         };
@@ -41,7 +39,7 @@ const ReactCalendar = ({ onDateChange }) => {
   
     return (
         <div>
-            <Calendar onChange={onChange} value={date} tileClassName={({ date, view }) => {
+            <Calendar onChange={onChange} value={date} tileClassName={({ date }) => {
                 if (filledDatesArray.includes(date.toISOString())) {
                     return 'highlight'
                 }

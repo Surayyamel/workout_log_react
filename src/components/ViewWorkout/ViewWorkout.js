@@ -17,12 +17,13 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
         weight: [],
     });
 
-    // Sort exercise list
+    // Sort exercise list into array from requestedWorkoutData object
     const exerciseArray = [];
     (function pushExercisesToArray(workout) {
         for (const exercise in workout) {
             exerciseArray.push(workout[exercise]);
         }
+        // Add the exercise id 
         for (let i = 0; i < exerciseArray.length; i++) {
             const keys = Object.keys(workout);
             exerciseArray[i].id = keys[i];
@@ -30,9 +31,9 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
     })(requestedWorkoutData);
 
     // Callback from EditButton component
-    const onEditClick = (id, name, sets, reps, weight) => {
+    const onEditClick = (exerciseId, name, sets, reps, weight) => {
         setEditFormData({
-            id: id,
+            id: exerciseId,
             name: name,
             sets: sets,
             reps: reps,
@@ -41,7 +42,7 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
         setShowEditForm(true);
     };
 
-    // Render exercise list
+    // Render exercise list from the exerciseArray
     const list = [];
     (function renderExerciseList() {
         exerciseArray.map((exercise, i) => {
@@ -77,20 +78,20 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
                     <div className="exercise-list__buttons-container">
                         <EditButton
                             onEditClick={onEditClick}
-                            id={exercise.id}
+                            exerciseId={exercise.id}
                             name={exercise.name}
                             sets={exercise.sets}
                             reps={exercise.reps}
                             weight={exercise.weight}
                         />
-                        <DeleteButton id={exercise.id} setDate={setDate} />
+                        <DeleteButton exerciseId={exercise.id} setDate={setDate} />
                     </div>
                 </div>
             );
         });
     })();
 
-    // Called in EditWorkout after Edit form submit
+    // Called in EditWorkout after Edit form is submitted
     const removeEditForm = () => {
         if (showEditForm) {
             setShowEditForm(false);
@@ -112,7 +113,7 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
         setShowAddForm(false);
     };
 
-    // Show edit form, add form or just the exercise list
+    // Show EditForm, AddForm or the exercise list
     const renderForms = () => {
         if (showEditForm) {
             return (
@@ -130,7 +131,6 @@ const ViewWorkout = ({ date, requestedWorkoutData, onFormSubmit, setDate }) => {
                 <div>
                     <WorkoutName date={date} />
                     <div>
-                        
                         <AddWorkout date={date} onFormSubmit={onAddSubmit} />
                         <button onClick={onCancelAddClick} className="exercise-list__add-exercise-cancel-button">Cancel</button>
                     </div>

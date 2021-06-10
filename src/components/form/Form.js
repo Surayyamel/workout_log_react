@@ -2,12 +2,13 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import './Form.scss';
 
-function App({ onFormSubmit, title, prefillData, buttonName }) {
+const Form = ({ onFormSubmit, title, prefillData, buttonName }) => {
     const defaultValues = {
         exerciseName: '',
         numberOfSets: 0,
     };
 
+    // Prefill the Edit form
     if (prefillData) {
         defaultValues.exerciseName = prefillData.name;
         defaultValues.numberOfSets = prefillData.sets;
@@ -31,6 +32,7 @@ function App({ onFormSubmit, title, prefillData, buttonName }) {
     });
 
     const onSubmit = (data) => {
+        // Add exercise id of exercise being edited to the data object
         if (prefillData) {
             data.id = Number(prefillData.id);
         }
@@ -40,7 +42,7 @@ function App({ onFormSubmit, title, prefillData, buttonName }) {
     // Watch to enable rerender when sets number is changed
     const watchNumberOfSets = watch('numberOfSets');
 
-    // Return array of sets indexes. Using the spread assings the indexes (if use new Array, you get [empty x n])
+    // Return array of sets indexes. Using the spread assings the indexes (if use new Array, you get [empty x n]), to map over
     const setsNumbers = () => {
         return [...Array(parseInt(watchNumberOfSets || 0)).keys()];
     };
@@ -109,4 +111,4 @@ function App({ onFormSubmit, title, prefillData, buttonName }) {
     );
 }
 
-export default App;
+export default Form;
