@@ -3,6 +3,10 @@ import Home from '../Home/Home';
 import { FcGoogle } from 'react-icons/fc';
 import { IconContext } from 'react-icons';
 import './App.scss';
+require('dotenv').config()
+
+const originURL = process.env.REACT_APP_ORIGIN_URL;
+console.log(originURL)
 
 const App = () => {
     const [loggedIn, setLoggedIn] = useState(false);
@@ -21,9 +25,10 @@ const App = () => {
             },
         };
         const response = await fetch(
-            'https://fenton-workout-log-server.herokuapp.com/loggedin',
+            `${originURL}/loggedin`,
             requestOptions
         );
+
 
         // True or false
         const loggedInStatus = await response.json();
@@ -34,7 +39,7 @@ const App = () => {
     const renderButtons = () => {
         if (loggedIn) {
             return (
-                <a href="https://fenton-workout-log-server.herokuapp.com/logout">
+                <a href={`${originURL}/logout`}>
                     <button className="google-button__sign-out">Log out</button>
                 </a>
             );
@@ -42,7 +47,7 @@ const App = () => {
             return (
                 <div>
                     <p className="google-button__upper-text">To start tracking your weights...</p>
-                    <a href="https://fenton-workout-log-server.herokuapp.com/auth/google">
+                    <a href={`${originURL}/auth/google`}>
                         <button className="google-button__sign-in">
                             <IconContext.Provider
                                 value={{ className: 'google-button__icon' }}

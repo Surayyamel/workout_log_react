@@ -6,6 +6,8 @@ import ViewWorkout from '../../components/ViewWorkout/ViewWorkout';
 import WorkoutName from '../../components/WorkoutName/WorkoutName';
 import './Home.scss';
 
+const originURL = process.env.REACT_APP_ORIGIN_URL;
+
 const formattedDate = format(new Date(), 'yyyy-MM-dd');
 
 const Home = () => {
@@ -20,7 +22,7 @@ const Home = () => {
                 credentials: 'include',
             };
             const response = await fetch(
-                `https://fenton-workout-log-server.herokuapp.com/workout/${date}`,
+                `${originURL}/workout/${date}`,
                 requestOptions
             );
 
@@ -46,7 +48,7 @@ const Home = () => {
             },
             body: JSON.stringify(formData),
         };
-        await fetch(`https://fenton-workout-log-server.herokuapp.com/workout/${date}`, requestOptions);
+        await fetch(`${originURL}/workout/${date}`, requestOptions);
 
         // Force a rerender (because date is a string & cannot be todays date or will not rerender), to see the newly posted exercise.
         setDate('2000-01-01');

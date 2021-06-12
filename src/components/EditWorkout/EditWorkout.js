@@ -2,6 +2,8 @@ import React from 'react';
 import Form from '../form/Form';
 
 const EditWorkout = ({ date, prefillData, setDate, removeEditForm }) => {
+    const originURL = process.env.REACT_APP_ORIGIN_URL;
+
     const onSubmit = async (formData) => {
         const requestOptions = {
             method: 'PUT',
@@ -13,7 +15,7 @@ const EditWorkout = ({ date, prefillData, setDate, removeEditForm }) => {
            
         };
         
-        await fetch(`https://fenton-workout-log-server.herokuapp.com/workout/${date}`, requestOptions);
+        await fetch(`${originURL}/workout/${date}`, requestOptions);
        
         // Callback to viewWorkout to stop showing the Edit form
         removeEditForm();

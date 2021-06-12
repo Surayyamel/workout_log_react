@@ -2,7 +2,10 @@ import React from 'react';
 import { AiFillDelete } from "react-icons/ai"
 import './DeleteButton.scss';
 
+
 const DeleteButton = ({ exerciseId, setDate }) => {
+    const originURL = process.env.REACT_APP_ORIGIN_URL;
+
     const onDeleteClick = async () => {
         const requestOptions = {
             method: 'DELETE',
@@ -13,7 +16,7 @@ const DeleteButton = ({ exerciseId, setDate }) => {
             body: JSON.stringify({id: exerciseId}),
         };
        
-        await fetch(`https://fenton-workout-log-server.herokuapp.com/workout`, requestOptions);
+        await fetch(`${originURL}/workout`, requestOptions);
 
         // To re-render the home page and GET/show the updated list
         setDate('2000-01-01');

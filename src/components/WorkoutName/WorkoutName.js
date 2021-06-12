@@ -12,6 +12,9 @@ const WorkoutName = ({ date }) => {
     // Returned name from GET request, displayed in the JSX
     const [requestedWorkoutName, setrequestedWorkoutName] = useState(null);
 
+    const originURL = process.env.REACT_APP_ORIGIN_URL;
+
+
     useEffect(() => {
         // isMounted fix to the state update on an unmounted component
         let isMounted = true;
@@ -24,7 +27,7 @@ const WorkoutName = ({ date }) => {
                 },
             };
             const response = await fetch(
-                `https://fenton-workout-log-server.herokuapp.com/workout/${date}/name`,
+                `${originURL}/workout/${date}/name`,
                 requestOptions
             );
 
@@ -40,7 +43,7 @@ const WorkoutName = ({ date }) => {
         return () => {
             isMounted = false;
         };
-    }, [date, postedWorkoutName]);
+    }, [date, postedWorkoutName, originURL]);
 
     const onWorkoutNameSubmit = async (e) => {
         e.preventDefault();
@@ -60,7 +63,7 @@ const WorkoutName = ({ date }) => {
         };
 
         const response = await fetch(
-            `https://fenton-workout-log-server.herokuapp.com/workout/${date}/name`,
+            `${originURL}/workout/${date}/name`,
             requestOptions
         );
 
@@ -97,7 +100,7 @@ const WorkoutName = ({ date }) => {
             })
         };
         const response = await fetch(
-            `https://fenton-workout-log-server.herokuapp.com/workout/${date}/name`,
+            `${originURL}/workout/${date}/name`,
             requestOptions
         );
         const { name } = await response.json();
@@ -111,7 +114,7 @@ const WorkoutName = ({ date }) => {
             method: 'DELETE',
             credentials: 'include'
         };
-        await fetch(`https://fenton-workout-log-server.herokuapp.com/workout/${date}/name`, requestOptions);
+        await fetch(`${originURL}/workout/${date}/name`, requestOptions);
         setrequestedWorkoutName(null);
     }
 

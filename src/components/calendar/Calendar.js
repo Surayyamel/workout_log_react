@@ -6,7 +6,9 @@ import './Calendar.css';
 const ReactCalendar = ({ onDateChange }) => {
     const [date, setDate] = useState(new Date());
     const [filledDatesArray, setFilledDatesArray] = useState([]);
-    
+
+    const originURL = process.env.REACT_APP_ORIGIN_URL;
+
     const formattedDate = format(date, 'yyyy-MM-dd');
 
     useEffect(() => {
@@ -25,7 +27,7 @@ const ReactCalendar = ({ onDateChange }) => {
                 credentials: 'include'
             };
             const response = await fetch(
-                `https://fenton-workout-log-server.herokuapp.com/workout/${date}/filled`,
+                `${originURL}/workout/${date}/filled`,
                 requestOptions
             );
 
@@ -34,7 +36,7 @@ const ReactCalendar = ({ onDateChange }) => {
             return jsonData;
         };
         fetchDates().then((data) => setFilledDatesArray(data))
-    }, [date]);
+    }, [date, originURL]);
 
   
     return (
