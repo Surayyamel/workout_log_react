@@ -25,7 +25,7 @@ const ReactCalendar = ({ onDateChange }) => {
                 credentials: 'include'
             };
             const response = await fetch(
-                `http://localhost:3001/workout/${date}/filled`,
+                `https://fenton-workout-log-server.herokuapp.com/workout/${date}/filled`,
                 requestOptions
             );
 

@@ -21,7 +21,7 @@ const App = () => {
             },
         };
         const response = await fetch(
-            'http://localhost:3001/loggedin',
+            'https://fenton-workout-log-server.herokuapp.com/loggedin',
             requestOptions
         );
 
@@ -34,7 +34,7 @@ const App = () => {
     const renderButtons = () => {
         if (loggedIn) {
             return (
-                <a href="http://localhost:3001/logout">
+                <a href="https://fenton-workout-log-server.herokuapp.com/logout">
                     <button className="google-button__sign-out">Log out</button>
                 </a>
             );
@@ -42,7 +42,7 @@ const App = () => {
             return (
                 <div>
                     <p className="google-button__upper-text">To start tracking your weights...</p>
-                    <a href="http://localhost:3001/auth/google">
+                    <a href="https://fenton-workout-log-server.herokuapp.com/auth/google">
                         <button className="google-button__sign-in">
                             <IconContext.Provider
                                 value={{ className: 'google-button__icon' }}

@@ -24,7 +24,7 @@ const WorkoutName = ({ date }) => {
                 },
             };
             const response = await fetch(
-                `http://localhost:3001/workout/${date}/name`,
+                `https://fenton-workout-log-server.herokuapp.com/workout/${date}/name`,
                 requestOptions
             );
 
@@ -60,7 +60,7 @@ const WorkoutName = ({ date }) => {
         };
 
         const response = await fetch(
-            `http://localhost:3001/workout/${date}/name`,
+            `https://fenton-workout-log-server.herokuapp.com/workout/${date}/name`,
             requestOptions
         );
 
@@ -97,7 +97,7 @@ const WorkoutName = ({ date }) => {
             })
         };
         const response = await fetch(
-            `http://localhost:3001/workout/${date}/name`,
+            `https://fenton-workout-log-server.herokuapp.com/workout/${date}/name`,
             requestOptions
         );
         const { name } = await response.json();
@@ -111,7 +111,7 @@ const WorkoutName = ({ date }) => {
             method: 'DELETE',
             credentials: 'include'
         };
-        await fetch(`http://localhost:3001/workout/${date}/name`, requestOptions);
+        await fetch(`https://fenton-workout-log-server.herokuapp.com/workout/${date}/name`, requestOptions);
         setrequestedWorkoutName(null);
     }
 

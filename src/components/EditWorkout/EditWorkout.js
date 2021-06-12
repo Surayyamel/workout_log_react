@@ -13,7 +13,7 @@ const EditWorkout = ({ date, prefillData, setDate, removeEditForm }) => {
            
         };
         
-        await fetch(`http://localhost:3001/workout/${date}`, requestOptions);
+        await fetch(`https://fenton-workout-log-server.herokuapp.com/workout/${date}`, requestOptions);
        
         // Callback to viewWorkout to stop showing the Edit form
         removeEditForm();

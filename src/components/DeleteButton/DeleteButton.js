@@ -13,7 +13,7 @@ const DeleteButton = ({ exerciseId, setDate }) => {
             body: JSON.stringify({id: exerciseId}),
         };
        
-        await fetch(`http://localhost:3001/workout`, requestOptions);
+        await fetch(`https://fenton-workout-log-server.herokuapp.com/workout`, requestOptions);
 
         // To re-render the home page and GET/show the updated list
         setDate('2000-01-01');

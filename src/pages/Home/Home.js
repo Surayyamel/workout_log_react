@@ -20,7 +20,7 @@ const Home = () => {
                 credentials: 'include',
             };
             const response = await fetch(
-                `http://localhost:3001/workout/${date}`,
+                `https://fenton-workout-log-server.herokuapp.com/workout/${date}`,
                 requestOptions
             );
 
@@ -46,7 +46,7 @@ const Home = () => {
             },
             body: JSON.stringify(formData),
         };
-        await fetch(`http://localhost:3001/workout/${date}`, requestOptions);
+        await fetch(`https://fenton-workout-log-server.herokuapp.com/workout/${date}`, requestOptions);
 
         // Force a rerender (because date is a string & cannot be todays date or will not rerender), to see the newly posted exercise.
         setDate('2000-01-01');
