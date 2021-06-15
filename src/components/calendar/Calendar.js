@@ -38,7 +38,8 @@ const ReactCalendar = ({ onDateChange }) => {
         fetchDates().then((data) => setFilledDatesArray(data))
     }, [date, originURL]);
 
-  
+    console.log(filledDatesArray)
+
     return (
         <div>
             <Calendar onChange={onChange} value={date} tileClassName={({ date }) => {
