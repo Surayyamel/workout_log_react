@@ -4,12 +4,12 @@ import { format } from 'date-fns';
 import './Calendar.css';
 
 const ReactCalendar = ({ onDateChange }) => {
-    const [selectedDate, setDate] = useState(new Date());
+    const [date, setDate] = useState(new Date());
     const [filledDatesArray, setFilledDatesArray] = useState([]);
 
     const originURL = process.env.REACT_APP_ORIGIN_URL;
 
-    const formattedDate = format(selectedDate, 'yyyy-MM-dd');
+    const formattedDate = format(date, 'yyyy-MM-dd');
 
     useEffect(() => {
         // Callback from Home component, updates the date state
@@ -30,7 +30,7 @@ const ReactCalendar = ({ onDateChange }) => {
                 },
             };
             const response = await fetch(
-                `${originURL}/workout/${selectedDate}/filled`,
+                `${originURL}/workout/${date}/filled`,
                 requestOptions
             );
 
@@ -39,18 +39,19 @@ const ReactCalendar = ({ onDateChange }) => {
             return jsonData;
         };
         fetchDates().then((data) => setFilledDatesArray(data))
-    }, [selectedDate, originURL]);
+    }, [date, originURL]);
 
     console.log(filledDatesArray)
 
     return (
         <div>
-            <Calendar onChange={onChange} value={selectedDate} tileClassName={({ date }) => {
-                console.log('date', date)
-                console.log('dateToISO', date.toISOString())
+            <Calendar onChange={onChange} value={date} tileClassName={({ date }) => {
+
                 if (filledDatesArray.includes(date.toISOString())) {
                     console.log(('highlight'))
                     return 'highlight'
+                } else {
+                    console.log('not included')
                 }
             }} />
         </div>
