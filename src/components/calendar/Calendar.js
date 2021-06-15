@@ -24,7 +24,10 @@ const ReactCalendar = ({ onDateChange }) => {
         const fetchDates = async () => {
             const requestOptions = {
                 method: 'GET',
-                credentials: 'include'
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             };
             const response = await fetch(
                 `${originURL}/workout/${date}/filled`,
@@ -38,12 +41,12 @@ const ReactCalendar = ({ onDateChange }) => {
         fetchDates().then((data) => setFilledDatesArray(data))
     }, [date, originURL]);
 
-    console.log(filledDatesArray)
-
     return (
         <div>
             <Calendar onChange={onChange} value={date} tileClassName={({ date }) => {
+                console.log(date)
                 if (filledDatesArray.includes(date.toISOString())) {
+                    console.log(('highlight'))
                     return 'highlight'
                 }
             }} />
