@@ -43,7 +43,7 @@ const ReactCalendar = ({ onDateChange }) => {
     }, [date, originURL]);
 
     const datesFromStamps = filledDatesArray.map((date) => {
-        return String(new Date(date))
+        return String(new Date(date)).substring(0, 15)
     })
    
     console.log(datesFromStamps)
@@ -54,11 +54,11 @@ const ReactCalendar = ({ onDateChange }) => {
                 onChange={onChange}
                 value={date}
                 tileClassName={({ date }) => {
-                    console.log(String(date))
+                    
                     if (
-                        datesFromStamps.includes(String(date))
+                        datesFromStamps.includes(String(date).substring(0, 15))
                     ) {
-                        console.log(date)
+                        console.log(String(date).substring(0, 15))
                         
                         return 'highlight';
                     }
