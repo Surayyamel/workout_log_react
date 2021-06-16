@@ -18,6 +18,7 @@ const ReactCalendar = ({ onDateChange }) => {
 
     const onChange = (date) => {
         setDate(date);
+        console.log('changed date:', date)
     };
 
     useEffect(() => {
@@ -42,24 +43,22 @@ const ReactCalendar = ({ onDateChange }) => {
         fetchDates().then((array) => setFilledDatesArray(array));
     }, [date, originURL]);
 
-    const formattedArray = filledDatesArray.map((day) => {
-        return day.split('T')[0];
-    });
-
-    console.log(formattedArray);
-
+    const dateFromStamp = filledDatesArray.map((date) => {
+        return String(new Date(date))
+    })
+   
     return (
         <div>
             <Calendar
                 onChange={onChange}
                 value={date}
                 tileClassName={({ date }) => {
+
                     if (
-                        formattedArray.includes(
-                            date.toISOString().split('T')[0]
-                        )
+                        dateFromStamp.includes(String(date))
                     ) {
                         console.log(date)
+                        
                         return 'highlight';
                     }
                 }}
