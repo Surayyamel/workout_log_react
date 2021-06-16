@@ -38,22 +38,30 @@ const ReactCalendar = ({ onDateChange }) => {
             const jsonData = await response.json();
             return jsonData;
         };
-        fetchDates().then((data) => setFilledDatesArray(data))
+        
+        fetchDates().then((array) => setFilledDatesArray(array))
+
     }, [date, originURL]);
 
-    console.log(filledDatesArray)
+    const formattedArray = filledDatesArray.map((day) => {
+        return day.split('T')[0]
+    })
+
+    console.log(formattedArray);
 
     return (
         <div>
-            <Calendar onChange={onChange} value={date} tileClassName={({ date }) => {
-
-                if (filledDatesArray.includes(date.toISOString())) {
-                    console.log(('highlight'))
-                    return 'highlight'
-                } else {
-                    console.log('not included')
-                }
-            }} />
+            <Calendar
+                onChange={onChange}
+                value={date}
+                tileClassName={({ date }) => {
+                    console.log(date.toISOString().split('T')[0]);
+                    if (formattedArray.includes(date.toISOString().split('T')[0])) {
+                        console.log('highlight');
+                        return 'highlight';
+                    }
+                }}
+            />
         </div>
     );
 };
