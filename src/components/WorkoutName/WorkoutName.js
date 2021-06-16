@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import './WorkoutName.scss';
 
-const WorkoutName = ({ date }) => {
+const WorkoutName = ({ date, loggedIn }) => {
     const [showEditForm, setShowEditForm] = useState(false);
     // Input values for Add and Edit workout name forms
     const [workoutName, setWorkoutName] = useState('');
@@ -38,12 +38,15 @@ const WorkoutName = ({ date }) => {
                 setEditFormWorkoutName(name || '');
             }
         };
-        getWorkoutName();
+        if (loggedIn) {
+            getWorkoutName();
+        }
+        
 
         return () => {
             isMounted = false;
         };
-    }, [date, postedWorkoutName, originURL]);
+    }, [date, postedWorkoutName, originURL, loggedIn]);
 
     const onWorkoutNameSubmit = async (e) => {
         e.preventDefault();

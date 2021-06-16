@@ -10,10 +10,10 @@ const originURL = process.env.REACT_APP_ORIGIN_URL;
 
 const formattedDate = format(new Date(), 'yyyy-MM-dd');
 
-const Home = () => {
+const Home = ({ loggedIn }) => {
     const [date, setDate] = useState(formattedDate);
     const [requestedWorkoutData, setRequestedWorkoutData] = useState([]);
-    
+
     // getCurrentWorkout inside the effect hook to remove the dependency issue
     useEffect(() => {
         const getCurrentWorkout = async () => {
@@ -30,6 +30,7 @@ const Home = () => {
 
             setRequestedWorkoutData(() => jsonData);
         };
+        // Check if logged in first
         getCurrentWorkout();
     }, [date]);
 
@@ -59,7 +60,7 @@ const Home = () => {
             // If there is no workout for selected date
             return (
                 <div>
-                    <WorkoutName date={date} />
+                    <WorkoutName date={date} loggedIn={loggedIn} />
                     <AddWorkout onFormSubmit={onFormSubmit} />
                 </div>
             );
@@ -79,12 +80,10 @@ const Home = () => {
         <div className="main-content-container">
             <div className="calendar-container">
                 <h1 className="calendar__main-title">Workout Log</h1>
-                <Calendar onDateChange={onDateChange} />
+                <Calendar onDateChange={onDateChange} loggedIn={loggedIn} />
             </div>
 
-            <div className="workout-container">
-                {renderAddWorkout()}
-            </div>
+            <div className="workout-container">{renderAddWorkout()}</div>
         </div>
     );
 };

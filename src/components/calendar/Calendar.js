@@ -3,7 +3,7 @@ import Calendar from 'react-calendar';
 import { format } from 'date-fns';
 import './Calendar.css';
 
-const ReactCalendar = ({ onDateChange }) => {
+const ReactCalendar = ({ onDateChange, loggedIn }) => {
     const [date, setDate] = useState(new Date());
     const [filledDatesArray, setFilledDatesArray] = useState([]);
 
@@ -25,9 +25,7 @@ const ReactCalendar = ({ onDateChange }) => {
             const requestOptions = {
                 method: 'GET',
                 credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                
             };
             const response = await fetch(
                 `${originURL}/workout/${date}/filled`,
@@ -36,17 +34,21 @@ const ReactCalendar = ({ onDateChange }) => {
 
             // Array of dates that have either an exercise or workout name
             const jsonData = await response.json();
-            return jsonData;
+            setFilledDatesArray(jsonData)
+
         };
+        if (loggedIn) {
+            fetchDates();
+        }
+       
+        //.then((data) => setFilledDatesArray(data));
+    }, [date, originURL, loggedIn]);
 
-        fetchDates().then((array) => setFilledDatesArray(array));
-    }, [date, originURL]);
 
+    // Convert ISO timestamp to Date object to string so Calendar date comparaison succeeds
     const datesFromStamps = filledDatesArray.map((date) => {
-        return String(new Date(date)).substring(0, 15)
-    })
-   
-    console.log(datesFromStamps)
+        return String(new Date(date)).substring(0, 15);
+    });
 
     return (
         <div>
@@ -54,12 +56,9 @@ const ReactCalendar = ({ onDateChange }) => {
                 onChange={onChange}
                 value={date}
                 tileClassName={({ date }) => {
-                    
                     if (
                         datesFromStamps.includes(String(date).substring(0, 15))
                     ) {
-                        console.log(String(date).substring(0, 15))
-                        
                         return 'highlight';
                     }
                 }}

@@ -9,7 +9,6 @@ const originURL = process.env.REACT_APP_ORIGIN_URL;
 
 const App = () => {
     const [loggedIn, setLoggedIn] = useState(false);
-    
     try {
         // Check to see if a user is logged in
         useEffect(() => {
@@ -68,10 +67,25 @@ const App = () => {
         }
     };
 
+    const showHome = () => {
+        if (loggedIn) {
+            console.log(loggedIn, 'rendering home')
+            return <Home loggedIn={loggedIn} />
+        } else {
+            console.log(loggedIn, 'logged out init')
+            return (
+                <div className="header-text__container">
+                    <p className="header-text__sentance">Ready to keep track of your workouts and weights? Sign in now!</p>
+                    
+                </div>
+            );
+        }
+    }
+
     return (
         <div className="main-container">
-            <div className="log-buttons-container">{renderButtons()}</div>
-            <Home />
+        <div className="log-buttons-container">{renderButtons()}</div>
+            {showHome()}
         </div>
     );
 };
