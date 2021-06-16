@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AiFillEdit, AiFillDelete } from "react-icons/ai";
+import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 import './WorkoutName.scss';
 
 const WorkoutName = ({ date, loggedIn }) => {
@@ -13,7 +13,6 @@ const WorkoutName = ({ date, loggedIn }) => {
     const [requestedWorkoutName, setrequestedWorkoutName] = useState(null);
 
     const originURL = process.env.REACT_APP_ORIGIN_URL;
-
 
     useEffect(() => {
         // isMounted fix to the state update on an unmounted component
@@ -38,10 +37,8 @@ const WorkoutName = ({ date, loggedIn }) => {
                 setEditFormWorkoutName(name || '');
             }
         };
-        if (loggedIn) {
-            getWorkoutName();
-        }
-        
+
+        getWorkoutName();
 
         return () => {
             isMounted = false;
@@ -99,8 +96,8 @@ const WorkoutName = ({ date, loggedIn }) => {
             },
             body: JSON.stringify({
                 name: editFormWorkoutName,
-                date: date
-            })
+                date: date,
+            }),
         };
         const response = await fetch(
             `${originURL}/workout/${date}/name`,
@@ -115,16 +112,19 @@ const WorkoutName = ({ date, loggedIn }) => {
     const onWorkoutNameDelete = async () => {
         const requestOptions = {
             method: 'DELETE',
-            credentials: 'include'
+            credentials: 'include',
         };
         await fetch(`${originURL}/workout/${date}/name`, requestOptions);
         setrequestedWorkoutName(null);
-    }
+    };
 
     const renderWorkoutName = () => {
         if (showEditForm) {
             return (
-                <form className="workout-name__form-container" onSubmit={onEditFormSubmit} >
+                <form
+                    className="workout-name__form-container"
+                    onSubmit={onEditFormSubmit}
+                >
                     <input
                         name="editInput"
                         type="text"
@@ -133,21 +133,38 @@ const WorkoutName = ({ date, loggedIn }) => {
                         className="workout-name__input"
                         required
                     />
-                    <button className="workout-name__button workout-name__button--add">Ok</button>
+                    <button className="workout-name__button workout-name__button--add">
+                        Ok
+                    </button>
                 </form>
             );
         } else if (requestedWorkoutName && requestedWorkoutName !== 'No name') {
             return (
                 <div className="workout-name__title-container">
-                    <h2 className="workout-name__title">{requestedWorkoutName}</h2>
-                    <button onClick={onWorkoutNameEditClick} className="workout-name__button workout-name__button--edit"><AiFillEdit/></button>
-                    <button onClick={onWorkoutNameDelete}className="workout-name__button workout-name__button--delete"><AiFillDelete/></button>
+                    <h2 className="workout-name__title">
+                        {requestedWorkoutName}
+                    </h2>
+                    <button
+                        onClick={onWorkoutNameEditClick}
+                        className="workout-name__button workout-name__button--edit"
+                    >
+                        <AiFillEdit />
+                    </button>
+                    <button
+                        onClick={onWorkoutNameDelete}
+                        className="workout-name__button workout-name__button--delete"
+                    >
+                        <AiFillDelete />
+                    </button>
                 </div>
             );
         } else {
             return (
                 <div className="workout-name__form-container">
-                    <form onSubmit={onWorkoutNameSubmit} className="workout-name__form">
+                    <form
+                        onSubmit={onWorkoutNameSubmit}
+                        className="workout-name__form"
+                    >
                         <input
                             placeholder="Workout name"
                             type="text"
@@ -157,7 +174,12 @@ const WorkoutName = ({ date, loggedIn }) => {
                             required
                             className="workout-name__input"
                         />
-                        <button type="submit" className="workout-name__button workout-name__button--add">Add</button>
+                        <button
+                            type="submit"
+                            className="workout-name__button workout-name__button--add"
+                        >
+                            Add
+                        </button>
                     </form>
                 </div>
             );

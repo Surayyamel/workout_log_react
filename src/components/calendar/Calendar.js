@@ -25,7 +25,6 @@ const ReactCalendar = ({ onDateChange, loggedIn }) => {
             const requestOptions = {
                 method: 'GET',
                 credentials: 'include',
-                
             };
             const response = await fetch(
                 `${originURL}/workout/${date}/filled`,
@@ -34,16 +33,13 @@ const ReactCalendar = ({ onDateChange, loggedIn }) => {
 
             // Array of dates that have either an exercise or workout name
             const jsonData = await response.json();
-            setFilledDatesArray(jsonData)
-
+            setFilledDatesArray(jsonData);
         };
-        if (loggedIn) {
-            fetchDates();
-        }
-       
+
+        fetchDates();
+
         //.then((data) => setFilledDatesArray(data));
     }, [date, originURL, loggedIn]);
-
 
     // Convert ISO timestamp to Date object to string so Calendar date comparaison succeeds
     const datesFromStamps = filledDatesArray.map((date) => {
