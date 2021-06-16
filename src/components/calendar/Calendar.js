@@ -38,16 +38,15 @@ const ReactCalendar = ({ onDateChange }) => {
             const jsonData = await response.json();
             return jsonData;
         };
-        
-        fetchDates().then((array) => setFilledDatesArray(array))
 
+        fetchDates().then((array) => setFilledDatesArray(array));
     }, [date, originURL]);
 
-    const formattedArray = filledDatesArray.map((day) => {
-        return day.split('T')[0]
-    })
+    // const formattedArray = filledDatesArray.map((day) => {
+    //     return day.split('T')[0];
+    // });
 
-    console.log(formattedArray);
+     console.log(filledDatesArray);
 
     return (
         <div>
@@ -55,9 +54,12 @@ const ReactCalendar = ({ onDateChange }) => {
                 onChange={onChange}
                 value={date}
                 tileClassName={({ date }) => {
-                    console.log(date.toISOString().split('T')[0]);
-                    if (formattedArray.includes(date.toISOString().split('T')[0])) {
-                        console.log('highlight');
+                    console.log(date.toISOString())
+                    if (
+                        filledDatesArray.includes(
+                            date.toISOString()
+                        )
+                    ) {
                         return 'highlight';
                     }
                 }}
