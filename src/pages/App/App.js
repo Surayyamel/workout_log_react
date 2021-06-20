@@ -8,7 +8,7 @@ require('dotenv').config();
 const originURL = process.env.REACT_APP_ORIGIN_URL;
 
 const App = () => {
-    const [loggedIn, setLoggedIn] = useState(false);
+    const [loggedIn, setLoggedIn] = useState("out");
     try {
         // Check to see if a user is logged in
         useEffect(() => {
@@ -38,10 +38,10 @@ const App = () => {
     }
 
     const renderButtons = () => {
-        if (loggedIn) {
+        if (loggedIn === "in") {
             return (
                 <a href={`${originURL}/logout`}>
-                    <button className="google-button__sign-out">Log out</button>
+                    <button className="google-button__sign-out" onClick={() => console.log('log out click')}>Log out</button>
                 </a>
             );
         } else {
@@ -51,7 +51,7 @@ const App = () => {
                         To start tracking your weights...
                     </p>
                     <a href={`${originURL}/auth/google`}>
-                        <button className="google-button__sign-in">
+                        <button className="google-button__sign-in" onClick={() => console.log('log in click')}>
                             <IconContext.Provider
                                 value={{ className: 'google-button__icon' }}
                             >
@@ -68,11 +68,9 @@ const App = () => {
     };
 
     const showHome = () => {
-        if (loggedIn) {
-            console.log(loggedIn, 'rendering home')
+        if (loggedIn === "in") {
             return <Home loggedIn={loggedIn} />
         } else {
-            console.log(loggedIn, 'logged out init')
             return (
                 <div className="header-text__container">
                     <p className="header-text__sentance">Ready to keep track of your workouts and weights? Sign in now!</p>

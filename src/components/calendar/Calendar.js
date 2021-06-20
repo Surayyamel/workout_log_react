@@ -31,20 +31,18 @@ const ReactCalendar = ({ onDateChange, loggedIn }) => {
                 requestOptions
             );
 
-            // Array of dates that have either an exercise or workout name
-            const jsonData = await response.json();
-            setFilledDatesArray(jsonData);
+            try {
+                // Array of dates (strings) that have either an exercise or workout name
+                const jsonData = await response.json();
+        
+                setFilledDatesArray(jsonData);
+            } catch (error) {
+                console.error(error);
+            }
         };
 
         fetchDates();
-
-        //.then((data) => setFilledDatesArray(data));
     }, [date, originURL, loggedIn]);
-
-    // Convert ISO timestamp to Date object to string so Calendar date comparaison succeeds
-    const datesFromStamps = filledDatesArray.map((date) => {
-        return String(new Date(date)).substring(0, 15);
-    });
 
     return (
         <div>
@@ -53,7 +51,7 @@ const ReactCalendar = ({ onDateChange, loggedIn }) => {
                 value={date}
                 tileClassName={({ date }) => {
                     if (
-                        datesFromStamps.includes(String(date).substring(0, 15))
+                        filledDatesArray.includes(String(date).substring(0, 15))
                     ) {
                         return 'highlight';
                     }
