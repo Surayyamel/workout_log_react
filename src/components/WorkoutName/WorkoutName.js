@@ -124,6 +124,7 @@ const WorkoutName = ({ date, loggedIn }) => {
                 <form
                     className="workout-name__form-container"
                     onSubmit={onEditFormSubmit}
+                    autoComplete="off"
                 >
                     <input
                         name="editInput"
@@ -164,6 +165,7 @@ const WorkoutName = ({ date, loggedIn }) => {
                     <form
                         onSubmit={onWorkoutNameSubmit}
                         className="workout-name__form"
+                        autoComplete="off"
                     >
                         <input
                             placeholder="Workout name"

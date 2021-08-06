@@ -42,14 +42,14 @@ const Form = ({ onFormSubmit, title, prefillData, buttonName }) => {
     // Watch to enable rerender when sets number is changed
     const watchNumberOfSets = watch('numberOfSets');
 
-    // Return array of sets indexes. Using the spread assings the indexes (if use new Array, you get [empty x n]), to map over
+    // Return array of sets indexes. Using the spread assigns the indexes (if use new Array, you get [empty x n]), to map over
     const setsNumbers = () => {
         return [...Array(parseInt(watchNumberOfSets || 0)).keys()];
     };
 
    
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="form__container">
+        <form onSubmit={handleSubmit(onSubmit)} className="form__container" autoComplete="off">
             <h3 className="form__title">{title}</h3>
             <label>Exercise Name:</label>
             <input
