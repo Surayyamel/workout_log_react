@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import validator from 'validator';
 import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 import './WorkoutName.scss';
+import { trim } from 'lodash';
 
 const WorkoutName = ({ date, loggedIn }) => {
     const [showEditForm, setShowEditForm] = useState(false);
@@ -11,8 +13,12 @@ const WorkoutName = ({ date, loggedIn }) => {
     const [postedWorkoutName, setPostedWorkoutName] = useState('');
     // Returned name from GET request, displayed in the JSX
     const [requestedWorkoutName, setrequestedWorkoutName] = useState(null);
+    const [workoutNameError, setWorkoutNameError] = useState('');
 
     const originURL = process.env.REACT_APP_ORIGIN_URL;
+
+   
+    // Error: deleting and adding back the same name does not re-render the page
 
     useEffect(() => {
         // isMounted fix to the state update on an unmounted component
@@ -49,6 +55,7 @@ const WorkoutName = ({ date, loggedIn }) => {
         e.preventDefault();
 
         // Clean input data - CANNOT BE EMPTY
+        const trimmedName = trim(workoutName)
 
         const requestOptions = {
             method: 'POST',
@@ -58,9 +65,14 @@ const WorkoutName = ({ date, loggedIn }) => {
             },
             body: JSON.stringify({
                 date: date,
-                name: workoutName,
+                name: trimmedName,
             }),
         };
+       
+        if (!trimmedName.length) {
+            setWorkoutNameError('Field cannot be empty');
+            return;
+        }
 
         const response = await fetch(
             `${originURL}/workout/${date}/name`,
@@ -70,16 +82,30 @@ const WorkoutName = ({ date, loggedIn }) => {
         const jsonData = await response.json();
 
         // Update state to trigger a rerender and reset the input box
+        if (jsonData === postedWorkoutName) {
+            // If the same name is entered again, it will not re-render, force re-render with new value
+            setPostedWorkoutName('');
+        }
         setPostedWorkoutName(jsonData);
         setWorkoutName('');
     };
 
     const onWorkoutNameInputChange = (e) => {
         if (e.target.name === 'addInput') {
-            setWorkoutName(e.target.value);
+            if (validator.isAlphanumeric(e.target.value) || (e.target.value.includes(' ')) || (e.target.value === '')) {
+                setWorkoutName(e.target.value);
+                setWorkoutNameError('');
+            } else {
+                setWorkoutNameError('Please enter only letters and numbers');
+            }
         } else if (e.target.name === 'editInput') {
-            setEditFormWorkoutName(e.target.value);
-        }
+            if (validator.isAlphanumeric(e.target.value) || (e.target.value.includes(' ')) || (e.target.value === '')) {
+                setEditFormWorkoutName(e.target.value);
+                setWorkoutNameError('');
+            } else {
+                setWorkoutNameError('Please enter only letters and numbers');
+            }
+        }    
     };
 
     const onWorkoutNameEditClick = () => {
@@ -88,6 +114,13 @@ const WorkoutName = ({ date, loggedIn }) => {
 
     const onEditFormSubmit = async (e) => {
         e.preventDefault();
+        const trimmedEditName = trim(editFormWorkoutName)
+
+        if (!trimmedEditName.length) {
+            setWorkoutNameError('Field cannot be empty');
+            return;
+        }
+
         const requestOptions = {
             method: 'PUT',
             credentials: 'include',
@@ -95,10 +128,11 @@ const WorkoutName = ({ date, loggedIn }) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: editFormWorkoutName,
+                name: trimmedEditName,
                 date: date,
             }),
         };
+
         const response = await fetch(
             `${originURL}/workout/${date}/name`,
             requestOptions
@@ -121,23 +155,28 @@ const WorkoutName = ({ date, loggedIn }) => {
     const renderWorkoutName = () => {
         if (showEditForm) {
             return (
-                <form
-                    className="workout-name__form-container"
-                    onSubmit={onEditFormSubmit}
-                    autoComplete="off"
-                >
-                    <input
-                        name="editInput"
-                        type="text"
-                        onChange={onWorkoutNameInputChange}
-                        value={editFormWorkoutName}
-                        className="workout-name__input"
-                        required
-                    />
-                    <button className="workout-name__button workout-name__button--add">
-                        Ok
-                    </button>
-                </form>
+                <div className="workout-name__form-container">
+                    <form
+                        onSubmit={onEditFormSubmit}
+                        autoComplete="off"
+                    >
+                        <input
+                            name="editInput"
+                            type="text"
+                            pattern="[a-zA-Z0-9 ]+"
+                            onChange={onWorkoutNameInputChange}
+                            value={editFormWorkoutName}
+                            className="workout-name__input"
+                            required
+                        />
+                        <button className="workout-name__button workout-name__button--add">
+                            Ok
+                        </button>
+                    </form>
+                    <p>{workoutNameError}</p>
+                </div>
+                
+                
             );
         } else if (requestedWorkoutName && requestedWorkoutName !== 'No name') {
             return (
@@ -170,6 +209,7 @@ const WorkoutName = ({ date, loggedIn }) => {
                         <input
                             placeholder="Workout name"
                             type="text"
+                            pattern="[a-zA-Z0-9 ]+"
                             onChange={onWorkoutNameInputChange}
                             value={workoutName}
                             name="addInput"
@@ -183,6 +223,7 @@ const WorkoutName = ({ date, loggedIn }) => {
                             Add
                         </button>
                     </form>
+                    <p>{workoutNameError}</p>
                 </div>
             );
         }
