@@ -34,7 +34,6 @@ const ReactCalendar = ({ onDateChange, loggedIn }) => {
             try {
                 // Array of dates (strings) that have either an exercise or workout name
                 const jsonData = await response.json();
-                console.log(jsonData)
                 setFilledDatesArray(jsonData);
             } catch (error) {
                 console.error(error);
