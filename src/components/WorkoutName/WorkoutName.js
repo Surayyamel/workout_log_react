@@ -75,7 +75,7 @@ const WorkoutName = ({ date, loggedIn }) => {
         }
 
         const response = await fetch(
-            `${originURL}/workout/${date}/name`,
+            `${originURL}/workout/name`,
             requestOptions
         );
 
@@ -92,20 +92,20 @@ const WorkoutName = ({ date, loggedIn }) => {
 
     const onWorkoutNameInputChange = (e) => {
         if (e.target.name === 'addInput') {
-            if (validator.isAlphanumeric(e.target.value) || (e.target.value.includes(' ')) || (e.target.value === '')) {
+            if (validator.isAlphanumeric(e.target.value.replace(/\s/g, '')) || (e.target.value === '')) {
                 setWorkoutName(e.target.value);
                 setWorkoutNameError('');
             } else {
                 setWorkoutNameError('Please enter only letters and numbers');
             }
         } else if (e.target.name === 'editInput') {
-            if (validator.isAlphanumeric(e.target.value) || (e.target.value.includes(' ')) || (e.target.value === '')) {
+            if (validator.isAlphanumeric(e.target.value.replace(/\s/g, '')) || (e.target.value === '')) {
                 setEditFormWorkoutName(e.target.value);
                 setWorkoutNameError('');
             } else {
                 setWorkoutNameError('Please enter only letters and numbers');
             }
-        }    
+        }
     };
 
     const onWorkoutNameEditClick = () => {
@@ -134,7 +134,7 @@ const WorkoutName = ({ date, loggedIn }) => {
         };
 
         const response = await fetch(
-            `${originURL}/workout/${date}/name`,
+            `${originURL}/workout/name`,
             requestOptions
         );
         const { name } = await response.json();
@@ -148,7 +148,7 @@ const WorkoutName = ({ date, loggedIn }) => {
             method: 'DELETE',
             credentials: 'include',
         };
-        await fetch(`${originURL}/workout/${date}/name`, requestOptions);
+        await fetch(`${originURL}/workout/name/${date}`, requestOptions);
         setrequestedWorkoutName(null);
     };
 

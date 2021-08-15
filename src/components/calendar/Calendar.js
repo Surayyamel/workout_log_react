@@ -27,7 +27,7 @@ const ReactCalendar = ({ onDateChange, loggedIn }) => {
                 credentials: 'include',
             };
             const response = await fetch(
-                `${originURL}/workout/${date}/filled`,
+                `${originURL}/workout/${formattedDate}/filled`,
                 requestOptions
             );
 
@@ -41,7 +41,7 @@ const ReactCalendar = ({ onDateChange, loggedIn }) => {
         };
 
         fetchDates();
-    }, [date, originURL, loggedIn]);
+    }, [formattedDate, originURL, loggedIn]);
 
     return (
         <div>

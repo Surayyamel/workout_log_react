@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import './Form.scss';
 
 const Form = ({ onFormSubmit, title, prefillData, buttonName }) => {
+    const [onlySpacesError, setOnlySpacesError] = useState('');
+
     const defaultValues = {
         exerciseName: '',
         numberOfSets: 0,
@@ -36,7 +38,18 @@ const Form = ({ onFormSubmit, title, prefillData, buttonName }) => {
         if (prefillData) {
             data.id = Number(prefillData.id);
         }
-        onFormSubmit(data);
+
+        // Remove whitespace from exerciseName
+        const trimmed = {...data, exerciseName: data.exerciseName.trim()}
+        
+        // Check exercise name is not empty
+        if (data.exerciseName.trim()) {
+            onFormSubmit(trimmed);
+            setOnlySpacesError('');
+        } else {
+            setOnlySpacesError('Please enter an exercise name');
+            return;
+        }
     };
 
     // Watch to enable rerender when sets number is changed
@@ -55,7 +68,7 @@ const Form = ({ onFormSubmit, title, prefillData, buttonName }) => {
             <input
                 id="exerciseName"
                 {...register('exerciseName', {
-                    required: 'Please enter an exercise name',
+                    required: 'Exercise name is required',
                     pattern: {
                         value: /^[a-zA-Z0-9 ]*$/,
                         message: "Please enter only letters and numbers"
@@ -65,6 +78,7 @@ const Form = ({ onFormSubmit, title, prefillData, buttonName }) => {
             />
             <br />
             <p className="form__error-message">{errors.exerciseName && errors.exerciseName.message}</p>
+            <p className="form__error-message">{onlySpacesError}</p>
             <br />
             <label>Number of Sets:</label>
             <select
@@ -108,9 +122,7 @@ const Form = ({ onFormSubmit, title, prefillData, buttonName }) => {
                     />
                 </div>
             ))}
-
             <button type="submit" className="form__button form__button--add">{buttonName}</button>
-            
         </form>
     );
 }

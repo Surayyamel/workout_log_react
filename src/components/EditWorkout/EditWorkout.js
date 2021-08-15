@@ -12,10 +12,9 @@ const EditWorkout = ({ date, prefillData, setDate, removeEditForm }) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(formData),
-           
         };
         
-        await fetch(`${originURL}/workout/${date}`, requestOptions);
+        await fetch(`${originURL}/workout`, requestOptions);
        
         // Callback to viewWorkout to stop showing the Edit form
         removeEditForm();

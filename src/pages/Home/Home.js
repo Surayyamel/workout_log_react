@@ -41,15 +41,17 @@ const Home = ({ loggedIn }) => {
 
     // Callback for Form component on submit
     const onFormSubmit = async (formData) => {
+        const formAndDate = {...formData, date: date};
+
         const requestOptions = {
             method: 'POST',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(formAndDate),
         };
-        await fetch(`${originURL}/workout/${date}`, requestOptions);
+        await fetch(`${originURL}/workout`, requestOptions);
 
         // Force a rerender (because date is a string & cannot be todays date or will not rerender), to see the newly posted exercise.
         setDate('2000-01-01');
