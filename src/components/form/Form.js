@@ -56,6 +56,10 @@ const Form = ({ onFormSubmit, title, prefillData, buttonName }) => {
                 id="exerciseName"
                 {...register('exerciseName', {
                     required: 'Please enter an exercise name',
+                    pattern: {
+                        value: /^[a-zA-Z0-9 ]*$/,
+                        message: "Please enter only letters and numbers"
+                    }
                 })}
                 className="form__input--exercise-name"
             />
